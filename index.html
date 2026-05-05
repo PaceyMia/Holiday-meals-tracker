@@ -8,81 +8,99 @@
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
   :root {
-    --palm: #1a6b45;
-    --palm-light: #e8f5ef;
-    --sand: #f5ede0;
-    --coral: #e8603c;
-    --coral-light: #fdf0eb;
-    --ocean: #1b5e8c;
-    --ocean-light: #e3f0f8;
-    --gold: #c97d18;
-    --gold-light: #fdf3e0;
-    --text: #1c1c1e;
-    --muted: #6b7280;
-    --surface: #ffffff;
-    --bg: #faf8f5;
-    --border: rgba(0,0,0,0.08);
+    --palm:#1a6b45; --palm-light:#e8f5ef;
+    --sand:#f5ede0;
+    --coral:#e8603c; --coral-light:#fdf0eb;
+    --ocean:#1b5e8c; --ocean-light:#e3f0f8;
+    --gold:#c97d18; --gold-light:#fdf3e0;
+    --text:#1c1c1e; --muted:#6b7280;
+    --surface:#ffffff; --bg:#faf8f5;
+    --border:rgba(0,0,0,0.08);
   }
-  * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
-  body { font-family: 'Montserrat', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; margin: 0; padding: 0; }
-  .header { background: linear-gradient(135deg, var(--palm) 0%, #0f4a2e 100%); color: white; padding: 1.5rem 1.25rem 2.5rem; position: relative; overflow: hidden; }
-  .header::before { content: ''; position: absolute; top: -20px; right: -30px; width: 180px; height: 180px; background: rgba(255,255,255,0.05); border-radius: 50%; }
-  .header::after { content: ''; position: absolute; bottom: -40px; left: 20px; width: 120px; height: 120px; background: rgba(255,255,255,0.04); border-radius: 50%; }
-  .tab-bar { background: var(--surface); border-bottom: 1px solid var(--border); display: flex; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
-  .tab-btn { flex: 1; padding: 0.9rem 0.4rem; font-family: 'Montserrat', sans-serif; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); background: none; border: none; border-bottom: 3px solid transparent; cursor: pointer; transition: all 0.2s; }
-  .tab-btn.active { color: var(--palm); border-bottom-color: var(--palm); }
-  .tab-content { display: none; padding: 1.25rem; }
-  .tab-content.active { display: block; }
-  .card { background: var(--surface); border-radius: 16px; border: 1px solid var(--border); padding: 1.25rem; margin-bottom: 1rem; }
-  .stat-card { border-radius: 14px; padding: 1rem 1.1rem; margin-bottom: 0.75rem; }
-  .stat-label { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.3rem; }
-  .stat-value { font-size: 1.9rem; font-weight: 800; line-height: 1; }
-  .stat-sub { font-size: 0.73rem; font-weight: 500; margin-top: 0.25rem; opacity: 0.75; }
-  .progress-bar { height: 8px; border-radius: 99px; background: rgba(0,0,0,0.1); margin-top: 0.75rem; overflow: hidden; }
-  .progress-fill { height: 100%; border-radius: 99px; transition: width 0.4s ease; }
-  .big-btn { width: 100%; padding: 1rem 1.5rem; border-radius: 14px; border: none; font-family: 'Montserrat', sans-serif; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: all 0.15s; display: flex; align-items: center; justify-content: center; gap: 0.5rem; margin-bottom: 0.75rem; letter-spacing: 0.01em; }
-  .big-btn:active { transform: scale(0.97); }
-  .btn-palm { background: var(--palm); color: white; }
-  .btn-ocean { background: var(--ocean); color: white; }
-  .btn-outline { background: transparent; border: 2px solid var(--border); color: var(--text); }
-  .toggle-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-bottom: 1rem; }
-  .toggle-btn { padding: 0.9rem 0.5rem; border-radius: 12px; border: 2px solid var(--border); font-family: 'Montserrat', sans-serif; font-size: 0.78rem; font-weight: 700; cursor: pointer; transition: all 0.15s; background: var(--surface); color: var(--muted); text-align: center; }
-  .toggle-btn.active-lunch { border-color: var(--ocean); background: var(--ocean-light); color: var(--ocean); }
-  .toggle-btn.active-dinner { border-color: var(--palm); background: var(--palm-light); color: var(--palm); }
-  .toggle-btn.active-food { border-color: var(--palm); background: var(--palm-light); color: var(--palm); }
-  .toggle-btn.active-drinks { border-color: var(--coral); background: var(--coral-light); color: var(--coral); }
-  input[type="number"], input[type="text"], input[type="date"] { width: 100%; padding: 0.85rem 1rem; border-radius: 12px; border: 1.5px solid var(--border); font-family: 'Montserrat', sans-serif; font-size: 0.95rem; font-weight: 500; background: var(--bg); color: var(--text); outline: none; transition: border-color 0.15s; margin-bottom: 0.75rem; }
-  input:focus { border-color: var(--palm); }
-  .entry-item { display: flex; justify-content: space-between; align-items: flex-start; padding: 0.9rem 0; border-bottom: 1px solid var(--border); }
-  .entry-item:last-child { border-bottom: none; }
-  .pill { display: inline-block; padding: 0.18rem 0.55rem; border-radius: 99px; font-size: 0.6rem; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase; }
-  .pill-food { background: var(--palm-light); color: var(--palm); }
-  .pill-drinks { background: var(--coral-light); color: var(--coral); }
-  .pill-lunch { background: var(--ocean-light); color: var(--ocean); }
-  .pill-dinner { background: var(--palm-light); color: var(--palm); }
-  .delete-btn { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 1rem; padding: 0.25rem; line-height: 1; opacity: 0.4; transition: opacity 0.15s; }
-  .delete-btn:hover { opacity: 1; color: var(--coral); }
-  .section-label { font-size: 0.6rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.55rem; margin-top: 1.1rem; }
-  .section-label:first-child { margin-top: 0; }
-  .toast { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(100px); background: #1c1c1e; color: white; padding: 0.75rem 1.5rem; border-radius: 99px; font-family: 'Montserrat', sans-serif; font-size: 0.8rem; font-weight: 700; z-index: 1000; transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); pointer-events: none; white-space: nowrap; }
-  .toast.show { transform: translateX(-50%) translateY(0); }
-  .empty-state { text-align: center; padding: 2rem 1rem; color: var(--muted); font-size: 0.82rem; font-weight: 500; }
-  .empty-icon { font-size: 2.5rem; margin-bottom: 0.5rem; }
-  .day-scroll { display: flex; gap: 0.5rem; overflow-x: auto; padding-bottom: 0.5rem; margin-bottom: 1rem; scrollbar-width: none; }
-  .day-scroll::-webkit-scrollbar { display: none; }
-  .day-pill { padding: 0.42rem 1rem; border-radius: 99px; border: 1.5px solid var(--border); font-family: 'Montserrat', sans-serif; font-size: 0.68rem; font-weight: 700; cursor: pointer; white-space: nowrap; background: var(--surface); color: var(--muted); transition: all 0.15s; flex-shrink: 0; }
-  .day-pill.active { background: var(--palm); color: white; border-color: var(--palm); }
-  .rcpt-line { display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 0; border-bottom: 1px dashed var(--border); }
-  .rcpt-line:last-child { border-bottom: none; }
-  .rcpt-line-name { font-size: 0.8rem; font-weight: 600; flex: 1; color: var(--text); }
-  .rcpt-line-amt { font-size: 0.85rem; font-weight: 800; color: var(--text); white-space: nowrap; }
-  .line-cat-btn { padding: 0.25rem 0.55rem; border-radius: 99px; border: 1.5px solid var(--border); font-family: 'Montserrat', sans-serif; font-size: 0.58rem; font-weight: 800; text-transform: uppercase; cursor: pointer; background: var(--surface); color: var(--muted); transition: all 0.15s; white-space: nowrap; letter-spacing: 0.04em; }
-  .line-cat-btn.is-food { background: var(--palm-light); color: var(--palm); border-color: var(--palm); }
-  .line-cat-btn.is-drinks { background: var(--coral-light); color: var(--coral); border-color: var(--coral); }
+  *{-webkit-tap-highlight-color:transparent;box-sizing:border-box;}
+  body{font-family:'Montserrat',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;margin:0;padding:0;}
+  .header{background:linear-gradient(135deg,var(--palm) 0%,#0f4a2e 100%);color:white;padding:1.5rem 1.25rem 2.5rem;position:relative;overflow:hidden;}
+  .header::before{content:'';position:absolute;top:-20px;right:-30px;width:180px;height:180px;background:rgba(255,255,255,0.05);border-radius:50%;}
+  .header::after{content:'';position:absolute;bottom:-40px;left:20px;width:120px;height:120px;background:rgba(255,255,255,0.04);border-radius:50%;}
+  .tab-bar{background:var(--surface);border-bottom:1px solid var(--border);display:flex;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,0.06);}
+  .tab-btn{flex:1;padding:0.9rem 0.2rem;font-family:'Montserrat',sans-serif;font-size:0.6rem;font-weight:700;letter-spacing:0.03em;text-transform:uppercase;color:var(--muted);background:none;border:none;border-bottom:3px solid transparent;cursor:pointer;transition:all 0.2s;}
+  .tab-btn.active{color:var(--palm);border-bottom-color:var(--palm);}
+  .tab-content{display:none;padding:1.25rem;}
+  .tab-content.active{display:block;}
+  .card{background:var(--surface);border-radius:16px;border:1px solid var(--border);padding:1.25rem;margin-bottom:1rem;}
+  .stat-card{border-radius:14px;padding:1rem 1.1rem;margin-bottom:0.75rem;}
+  .stat-label{font-size:0.62rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:0.3rem;}
+  .stat-value{font-size:1.9rem;font-weight:800;line-height:1;}
+  .stat-sub{font-size:0.73rem;font-weight:500;margin-top:0.25rem;opacity:0.75;}
+  .progress-bar{height:8px;border-radius:99px;background:rgba(0,0,0,0.1);margin-top:0.75rem;overflow:hidden;}
+  .progress-fill{height:100%;border-radius:99px;transition:width 0.4s ease;}
+  .big-btn{width:100%;padding:1rem 1.5rem;border-radius:14px;border:none;font-family:'Montserrat',sans-serif;font-size:0.9rem;font-weight:700;cursor:pointer;transition:all 0.15s;display:flex;align-items:center;justify-content:center;gap:0.5rem;margin-bottom:0.75rem;letter-spacing:0.01em;}
+  .big-btn:active{transform:scale(0.97);}
+  .btn-palm{background:var(--palm);color:white;}
+  .btn-ocean{background:var(--ocean);color:white;}
+  .btn-gold{background:var(--gold);color:white;}
+  .btn-outline{background:transparent;border:2px solid var(--border);color:var(--text);}
+  .toggle-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.6rem;margin-bottom:1rem;}
+  .toggle-btn{padding:0.9rem 0.5rem;border-radius:12px;border:2px solid var(--border);font-family:'Montserrat',sans-serif;font-size:0.78rem;font-weight:700;cursor:pointer;transition:all 0.15s;background:var(--surface);color:var(--muted);text-align:center;}
+  .toggle-btn.active-lunch{border-color:var(--ocean);background:var(--ocean-light);color:var(--ocean);}
+  .toggle-btn.active-dinner{border-color:var(--palm);background:var(--palm-light);color:var(--palm);}
+  .toggle-btn.active-food{border-color:var(--palm);background:var(--palm-light);color:var(--palm);}
+  .toggle-btn.active-drinks{border-color:var(--coral);background:var(--coral-light);color:var(--coral);}
+  input[type="number"],input[type="text"],input[type="date"],input[type="url"]{width:100%;padding:0.85rem 1rem;border-radius:12px;border:1.5px solid var(--border);font-family:'Montserrat',sans-serif;font-size:0.95rem;font-weight:500;background:var(--bg);color:var(--text);outline:none;transition:border-color 0.15s;margin-bottom:0.75rem;}
+  input:focus{border-color:var(--palm);}
+  .entry-item{display:flex;justify-content:space-between;align-items:flex-start;padding:0.9rem 0;border-bottom:1px solid var(--border);}
+  .entry-item:last-child{border-bottom:none;}
+  .pill{display:inline-block;padding:0.18rem 0.55rem;border-radius:99px;font-size:0.6rem;font-weight:800;letter-spacing:0.05em;text-transform:uppercase;}
+  .pill-food{background:var(--palm-light);color:var(--palm);}
+  .pill-drinks{background:var(--coral-light);color:var(--coral);}
+  .pill-lunch{background:var(--ocean-light);color:var(--ocean);}
+  .pill-dinner{background:var(--palm-light);color:var(--palm);}
+  .pill-synced{background:#e8f5ef;color:#1a6b45;}
+  .pill-unsynced{background:#fdf3e0;color:#c97d18;}
+  .delete-btn{background:none;border:none;color:var(--muted);cursor:pointer;font-size:1rem;padding:0.25rem;line-height:1;opacity:0.4;transition:opacity 0.15s;flex-shrink:0;}
+  .delete-btn:hover{opacity:1;color:var(--coral);}
+  .section-label{font-size:0.6rem;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:0.55rem;margin-top:1.1rem;}
+  .section-label:first-child{margin-top:0;}
+  .toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(100px);background:#1c1c1e;color:white;padding:0.75rem 1.5rem;border-radius:99px;font-family:'Montserrat',sans-serif;font-size:0.8rem;font-weight:700;z-index:1000;transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1);pointer-events:none;white-space:nowrap;}
+  .toast.show{transform:translateX(-50%) translateY(0);}
+  .empty-state{text-align:center;padding:2rem 1rem;color:var(--muted);font-size:0.82rem;font-weight:500;}
+  .empty-icon{font-size:2.5rem;margin-bottom:0.5rem;}
+  .day-scroll{display:flex;gap:0.5rem;overflow-x:auto;padding-bottom:0.5rem;margin-bottom:1rem;scrollbar-width:none;}
+  .day-scroll::-webkit-scrollbar{display:none;}
+  .day-pill{padding:0.42rem 1rem;border-radius:99px;border:1.5px solid var(--border);font-family:'Montserrat',sans-serif;font-size:0.68rem;font-weight:700;cursor:pointer;white-space:nowrap;background:var(--surface);color:var(--muted);transition:all 0.15s;flex-shrink:0;}
+  .day-pill.active{background:var(--palm);color:white;border-color:var(--palm);}
+  .rcpt-line{display:flex;align-items:center;gap:0.5rem;padding:0.5rem 0;border-bottom:1px dashed var(--border);}
+  .rcpt-line:last-child{border-bottom:none;}
+  .rcpt-line-name{font-size:0.8rem;font-weight:600;flex:1;color:var(--text);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .rcpt-line-amt{font-size:0.85rem;font-weight:800;color:var(--text);white-space:nowrap;}
+  .line-cat-btn{padding:0.25rem 0.55rem;border-radius:99px;border:1.5px solid var(--border);font-family:'Montserrat',sans-serif;font-size:0.58rem;font-weight:800;text-transform:uppercase;cursor:pointer;background:var(--surface);color:var(--muted);transition:all 0.15s;white-space:nowrap;letter-spacing:0.04em;}
+  .line-cat-btn.is-food{background:var(--palm-light);color:var(--palm);border-color:var(--palm);}
+  .line-cat-btn.is-drinks{background:var(--coral-light);color:var(--coral);border-color:var(--coral);}
+  .drive-hint{background:var(--ocean-light);border-radius:12px;padding:0.75rem 1rem;font-size:0.76rem;font-weight:500;color:var(--ocean);line-height:1.55;margin-bottom:0.75rem;}
+  .drive-hint strong{font-weight:800;}
+  .resync-info{background:var(--gold-light);border-radius:12px;padding:0.75rem 1rem;font-size:0.76rem;font-weight:500;color:var(--gold);line-height:1.55;margin-bottom:0.75rem;}
+  /* chart styles */
+  .chart-wrap{background:var(--surface);border-radius:16px;border:1px solid var(--border);padding:1.1rem 1rem 0.75rem;margin-bottom:1rem;}
+  .chart-title{font-size:0.65rem;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:0.75rem;}
+  canvas{display:block;width:100%!important;}
+  .legend-row{display:flex;gap:1rem;flex-wrap:wrap;margin-top:0.6rem;}
+  .legend-dot{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:5px;flex-shrink:0;}
+  .legend-item{display:flex;align-items:center;font-size:0.68rem;font-weight:600;color:var(--muted);}
+  .summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.6rem;margin-bottom:1rem;}
+  .summary-tile{background:var(--surface);border-radius:14px;border:1px solid var(--border);padding:0.85rem 1rem;}
+  .summary-tile-label{font-size:0.58rem;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:0.25rem;}
+  .summary-tile-val{font-size:1.25rem;font-weight:800;}
+  .bar-row{display:flex;align-items:center;gap:0.6rem;margin-bottom:0.55rem;}
+  .bar-label{font-size:0.7rem;font-weight:700;width:52px;flex-shrink:0;color:var(--text);}
+  .bar-track{flex:1;height:22px;background:rgba(0,0,0,0.05);border-radius:6px;overflow:hidden;position:relative;}
+  .bar-fill{height:100%;border-radius:6px;transition:width 0.5s ease;display:flex;align-items:center;padding-left:0.4rem;}
+  .bar-amt{font-size:0.65rem;font-weight:800;color:white;white-space:nowrap;}
+  .bar-budget-line{position:absolute;top:0;bottom:0;width:2px;background:rgba(0,0,0,0.25);}
 </style>
 </head>
 <body>
 
+<!-- HEADER -->
 <div class="header">
   <div style="position:relative;z-index:1;">
     <div style="font-size:0.6rem;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;opacity:0.65;margin-bottom:0.3rem;">Holiday Tracker</div>
@@ -101,15 +119,17 @@
   </div>
 </div>
 
+<!-- 4 TABS -->
 <div class="tab-bar">
-  <button class="tab-btn active" onclick="switchTab('today',this)">Today</button>
-  <button class="tab-btn" onclick="switchTab('add',this)">+ Add</button>
-  <button class="tab-btn" onclick="switchTab('receipt',this)">Receipt</button>
-  <button class="tab-btn" onclick="switchTab('history',this)">History</button>
+  <button class="tab-btn active"  onclick="switchTab('today',this)">Today</button>
+  <button class="tab-btn"         onclick="switchTab('receipt',this)">Add Receipt</button>
+  <button class="tab-btn"         onclick="switchTab('charts',this)">Charts</button>
+  <button class="tab-btn"         onclick="switchTab('history',this)">History</button>
 </div>
 
-<!-- TODAY -->
+<!-- ════════════════ TODAY ════════════════ -->
 <div id="tab-today" class="tab-content active">
+
   <div class="section-label">Budget status</div>
   <div class="stat-card" style="background:var(--palm-light);">
     <div class="stat-label" style="color:var(--palm);">Daily Remaining (Food)</div>
@@ -117,6 +137,7 @@
     <div class="progress-bar"><div class="progress-fill" id="today-progress" style="background:var(--palm);width:100%;"></div></div>
     <div class="stat-sub" style="color:var(--palm);" id="today-spent-label">$0.00 spent of $332.00</div>
   </div>
+
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:0.75rem;">
     <div class="stat-card" style="background:var(--ocean-light);margin-bottom:0;">
       <div class="stat-label" style="color:var(--ocean);">Lunch</div>
@@ -127,52 +148,39 @@
       <div class="stat-value" style="color:var(--palm);font-size:1.35rem;" id="today-dinner">$0.00</div>
     </div>
   </div>
+
   <div class="stat-card" style="background:var(--coral-light);">
     <div class="stat-label" style="color:var(--coral);">Drinks and Coffees Today</div>
     <div class="stat-value" style="color:var(--coral);" id="today-drinks">$0.00</div>
     <div class="stat-sub" style="color:var(--coral);">Out of pocket</div>
   </div>
+
   <div class="section-label">Whole trip extra bill</div>
   <div class="stat-card" style="background:var(--gold-light);">
     <div class="stat-label" style="color:var(--gold);">Total Drinks and Coffees</div>
     <div class="stat-value" style="color:var(--gold);" id="trip-total-drinks">$0.00</div>
     <div class="stat-sub" style="color:var(--gold);" id="trip-days-label">Across 0 days</div>
   </div>
+
+  <div class="section-label">Sync</div>
+  <button class="big-btn btn-palm" onclick="syncGoogleSheets()">Sync New Entries to Sheets</button>
+
   <div class="section-label">Today's entries</div>
   <div class="card" style="padding:0 1.25rem;">
-    <div id="today-entries-list"><div class="empty-state"><div class="empty-icon">🌴</div>No entries yet. Hit Add to get started!</div></div>
+    <div id="today-entries-list">
+      <div class="empty-state"><div class="empty-icon">🌴</div>No entries yet. Add a receipt to get started!</div>
+    </div>
   </div>
+
 </div>
 
-<!-- ADD -->
-<div id="tab-add" class="tab-content">
-  <div class="section-label">Meal</div>
-  <div class="toggle-grid">
-    <button class="toggle-btn active-lunch" id="meal-lunch" onclick="selectMeal('lunch')">Lunch</button>
-    <button class="toggle-btn" id="meal-dinner" onclick="selectMeal('dinner')">Dinner</button>
-  </div>
-  <div class="section-label">Category</div>
-  <div class="toggle-grid">
-    <button class="toggle-btn active-food" id="cat-food" onclick="selectCat('food')">Food (budget)</button>
-    <button class="toggle-btn" id="cat-drinks" onclick="selectCat('drinks')">Drinks / Coffee</button>
-  </div>
-  <div class="section-label">Amount (FJD)</div>
-  <input type="number" id="amount-input" placeholder="0.00" inputmode="decimal" step="0.01" min="0">
-  <div class="section-label">Note (optional)</div>
-  <input type="text" id="note-input" placeholder="e.g. grilled fish, cocktails">
-  <div class="section-label">Date</div>
-  <input type="date" id="date-input">
-  <button class="big-btn btn-palm" onclick="addEntry()">Add Entry</button>
-  <button class="big-btn btn-outline" onclick="clearForm()">Clear</button>
-</div>
-
-<!-- RECEIPT -->
+<!-- ════════════════ ADD RECEIPT ════════════════ -->
 <div id="tab-receipt" class="tab-content">
-  <p style="font-size:0.82rem;font-weight:500;color:var(--muted);margin:0 0 1rem;line-height:1.6;">
-    Enter each line from your receipt. Tap the green or red pill to toggle it between Food and Drinks, then hit Add All to log everything at once.
-  </p>
 
-  <div class="section-label">Which meal is this receipt for?</div>
+  <div class="section-label">Restaurant name</div>
+  <input type="text" id="rcpt-restaurant" placeholder="e.g. Kula Wild Adventure Park">
+
+  <div class="section-label">Which meal?</div>
   <div class="toggle-grid">
     <button class="toggle-btn active-lunch" id="rcpt-meal-lunch" onclick="selectRcptMeal('lunch')">Lunch</button>
     <button class="toggle-btn" id="rcpt-meal-dinner" onclick="selectRcptMeal('dinner')">Dinner</button>
@@ -184,8 +192,9 @@
     <input type="number" id="rcpt-amt" placeholder="Amount (FJD)" inputmode="decimal" step="0.01" min="0" style="margin-bottom:0;">
     <button class="toggle-btn active-food" id="rcpt-cat-btn" onclick="toggleRcptCat()" style="padding:0.75rem 0.6rem;font-size:0.7rem;min-width:72px;">Food</button>
   </div>
-  <button class="big-btn btn-ocean" onclick="addReceiptLine()">Add Line Item</button>
+  <button class="big-btn btn-ocean" onclick="addReceiptLine()">Add Line</button>
 
+  <!-- Lines accumulate here -->
   <div id="rcpt-lines-section" style="display:none;">
     <div class="section-label">Lines on this receipt</div>
     <div class="card" style="padding:0.25rem 1rem;">
@@ -201,26 +210,91 @@
         <div style="font-size:1.2rem;font-weight:800;color:var(--coral);" id="rcpt-drinks-total">$0.00</div>
       </div>
     </div>
-    <button class="big-btn btn-palm" onclick="addAllReceiptLines()">Add All to Today</button>
-    <button class="big-btn btn-outline" onclick="clearReceipt()">Clear Receipt</button>
   </div>
+
+  <!-- ── Photo + Save block at bottom ── -->
+  <div class="section-label">Receipt photo (Google Drive link)</div>
+  <div class="drive-hint">
+    <strong>How to attach:</strong> Open your <a href="https://drive.google.com/drive/folders/1zJLfRJgatrNpT98NykilIFPjmFd0KXKt" target="_blank" style="color:var(--ocean);font-weight:800;">Drive folder</a>, upload the photo, right-click it, choose "Get link", set to "Anyone with link", then paste below.
+  </div>
+  <input type="url" id="rcpt-photo-url" placeholder="https://drive.google.com/file/d/...">
+  <button class="big-btn btn-outline" style="border-color:var(--ocean);color:var(--ocean);" onclick="window.open('https://drive.google.com/drive/folders/1zJLfRJgatrNpT98NykilIFPjmFd0KXKt','_blank')">
+    Open Drive Folder
+  </button>
+
+  <button class="big-btn btn-palm" onclick="addAllReceiptLines()">Save Receipt to Today</button>
+  <button class="big-btn btn-outline" onclick="clearReceipt()">Clear Receipt</button>
+
 </div>
 
-<!-- HISTORY -->
-<div id="tab-history" class="tab-content">
-  <div class="section-label">Browse by day</div>
-  <div class="day-scroll" id="day-tabs"></div>
-  <div id="history-content"><div class="empty-state"><div class="empty-icon">📋</div>No entries yet!</div></div>
+<!-- ════════════════ CHARTS ════════════════ -->
+<div id="tab-charts" class="tab-content">
 
-  <div class="section-label" style="margin-top:1.5rem;">Export and sync</div>
-  <button class="big-btn btn-ocean" onclick="exportCSV()">Download CSV</button>
-  <button class="big-btn" style="background:#25a244;color:white;" onclick="syncGoogleSheets()">Sync to Google Sheets</button>
-  <div style="margin-top:0.5rem;padding:0.85rem 1rem;background:var(--sand);border-radius:12px;font-size:0.76rem;color:var(--muted);line-height:1.65;font-weight:500;">
-    Sync sends each new entry to your Google Form. Already synced entries are skipped so nothing gets doubled up. Use CSV as a backup anytime.
+  <!-- Trip summary tiles -->
+  <div class="section-label">Trip overview</div>
+  <div class="summary-grid" id="chart-summary-tiles">
+    <div class="summary-tile"><div class="summary-tile-label">Days tracked</div><div class="summary-tile-val" id="cs-days">0</div></div>
+    <div class="summary-tile"><div class="summary-tile-label">Total food spend</div><div class="summary-tile-val" id="cs-food" style="color:var(--palm);">$0</div></div>
+    <div class="summary-tile"><div class="summary-tile-label">Total drinks</div><div class="summary-tile-val" id="cs-drinks" style="color:var(--coral);">$0</div></div>
+    <div class="summary-tile"><div class="summary-tile-label">Avg food / day</div><div class="summary-tile-val" id="cs-avg" style="color:var(--ocean);">$0</div></div>
   </div>
 
-  <div class="section-label" style="margin-top:1rem;">Danger zone</div>
+  <!-- Daily spend bar chart -->
+  <div class="section-label">Daily food spend vs $332 budget</div>
+  <div class="chart-wrap">
+    <div id="daily-bars">
+      <div class="empty-state" style="padding:1rem 0;"><div class="empty-icon" style="font-size:1.8rem;">📊</div>No data yet</div>
+    </div>
+  </div>
+
+  <!-- Stacked canvas chart: food vs drinks per day -->
+  <div class="section-label">Food vs drinks breakdown</div>
+  <div class="chart-wrap" id="stacked-wrap" style="display:none;">
+    <canvas id="stacked-chart" height="220"></canvas>
+    <div class="legend-row">
+      <div class="legend-item"><span class="legend-dot" style="background:#1a6b45;"></span>Food</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#e8603c;"></span>Drinks</div>
+      <div class="legend-item"><span class="legend-dot" style="background:rgba(0,0,0,0.15);"></span>Budget line</div>
+    </div>
+  </div>
+
+  <!-- Lunch vs Dinner pie-style bar -->
+  <div class="section-label">Lunch vs dinner split (food only)</div>
+  <div class="chart-wrap">
+    <div id="meal-split-chart">
+      <div class="empty-state" style="padding:1rem 0;"><div class="empty-icon" style="font-size:1.8rem;">🍽️</div>No data yet</div>
+    </div>
+  </div>
+
+  <!-- Most expensive days -->
+  <div class="section-label">Most expensive days</div>
+  <div class="chart-wrap">
+    <div id="expensive-days-chart">
+      <div class="empty-state" style="padding:1rem 0;"><div class="empty-icon" style="font-size:1.8rem;">💸</div>No data yet</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ════════════════ HISTORY ════════════════ -->
+<div id="tab-history" class="tab-content">
+
+  <div class="section-label">Browse by day</div>
+  <div class="day-scroll" id="day-tabs"></div>
+  <div id="history-content">
+    <div class="empty-state"><div class="empty-icon">📋</div>No entries yet!</div>
+  </div>
+
+  <div class="section-label" style="margin-top:1.5rem;">Sync and export</div>
+  <div class="resync-info">
+    <strong>Full resync</strong> clears all synced flags and re-sends every entry to Google Sheets from scratch. Use this to fix missing rows. Clear your sheet first to avoid duplicates.
+  </div>
+  <button class="big-btn btn-gold" onclick="fullResync()">Force Full Resync to Sheets</button>
+  <button class="big-btn btn-ocean" onclick="exportCSV()">Download CSV</button>
+
+  <div class="section-label" style="margin-top:0.5rem;">Danger zone</div>
   <button class="big-btn btn-outline" style="border-color:var(--coral);color:var(--coral);" onclick="clearAllData()">Clear All Data</button>
+
 </div>
 
 <div class="toast" id="toast"></div>
@@ -230,98 +304,74 @@ const DAILY_BUDGET = 332;
 const FORM_ACTION  = 'https://docs.google.com/forms/d/e/1FAIpQLSf8f33iPM_Ch3YfnQX6vjQFMrtwRRBQSPDgmUtkXNOviQmgsQ/formResponse';
 const FORM_FIELDS  = { date:'entry.649952955', meal:'entry.5383481', category:'entry.1435432657', amount:'entry.1178928293', note:'entry.98621961' };
 
-let entries    = JSON.parse(localStorage.getItem('holiday_entries') || '[]');
-let selMeal    = 'lunch';
-let selCat     = 'food';
-let rcptMeal   = 'lunch';
-let rcptCat    = 'food';
-let rcptLines  = [];
-let selDay     = null;
+let entries   = JSON.parse(localStorage.getItem('holiday_entries') || '[]');
+let rcptMeal  = 'lunch';
+let rcptCat   = 'food';
+let rcptLines = [];
+let selDay    = null;
 
 const todayStr = () => new Date().toISOString().split('T')[0];
 const fmtDate  = d  => new Date(d+'T12:00:00').toLocaleDateString('en-FJ',{weekday:'short',month:'short',day:'numeric'});
 const fmtAmt   = n  => '$'+Number(n).toFixed(2);
 const esc      = s  => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-const save     = () => localStorage.setItem('holiday_entries', JSON.stringify(entries));
+const save     = () => localStorage.setItem('holiday_entries',JSON.stringify(entries));
 
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2400);
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2600);
 }
 
-function switchTab(name, btn) {
-  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+function switchTab(name,btn){
+  document.querySelectorAll('.tab-content').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el=>el.classList.remove('active'));
   document.getElementById('tab-'+name).classList.add('active');
   btn.classList.add('active');
-  if (name === 'today')   renderToday();
-  if (name === 'history') renderHistory();
+  if(name==='today')   renderToday();
+  if(name==='history') renderHistory();
+  if(name==='charts')  renderCharts();
 }
 
-function selectMeal(m) {
-  selMeal = m;
-  document.getElementById('meal-lunch').className  = 'toggle-btn'+(m==='lunch' ?' active-lunch' :'');
-  document.getElementById('meal-dinner').className = 'toggle-btn'+(m==='dinner'?' active-dinner':'');
+// ── RECEIPT ──────────────────────────────────────────
+function selectRcptMeal(m){
+  rcptMeal=m;
+  document.getElementById('rcpt-meal-lunch').className ='toggle-btn'+(m==='lunch' ?' active-lunch' :'');
+  document.getElementById('rcpt-meal-dinner').className='toggle-btn'+(m==='dinner'?' active-dinner':'');
 }
-function selectCat(c) {
-  selCat = c;
-  document.getElementById('cat-food').className   = 'toggle-btn'+(c==='food'  ?' active-food'  :'');
-  document.getElementById('cat-drinks').className = 'toggle-btn'+(c==='drinks'?' active-drinks':'');
+function toggleRcptCat(){
+  rcptCat=rcptCat==='food'?'drinks':'food';
+  const btn=document.getElementById('rcpt-cat-btn');
+  btn.textContent=rcptCat==='food'?'Food':'Drinks';
+  btn.className='toggle-btn '+(rcptCat==='food'?'active-food':'active-drinks');
+  btn.style.cssText='padding:0.75rem 0.6rem;font-size:0.7rem;min-width:72px;';
 }
-function addEntry() {
-  const amt  = parseFloat(document.getElementById('amount-input').value);
-  if (!amt || amt <= 0) { showToast('Enter a valid amount first'); return; }
-  const note = document.getElementById('note-input').value.trim();
-  const date = document.getElementById('date-input').value || todayStr();
-  entries.push({ id: Date.now(), date, meal: selMeal, category: selCat, amount: amt, note });
-  save(); showToast('Entry added!'); clearForm(); renderToday();
-}
-function clearForm() {
-  document.getElementById('amount-input').value = '';
-  document.getElementById('note-input').value   = '';
-  document.getElementById('date-input').value   = todayStr();
-}
-
-function selectRcptMeal(m) {
-  rcptMeal = m;
-  document.getElementById('rcpt-meal-lunch').className  = 'toggle-btn'+(m==='lunch' ?' active-lunch' :'');
-  document.getElementById('rcpt-meal-dinner').className = 'toggle-btn'+(m==='dinner'?' active-dinner':'');
-}
-function toggleRcptCat() {
-  rcptCat = rcptCat === 'food' ? 'drinks' : 'food';
-  const btn = document.getElementById('rcpt-cat-btn');
-  btn.textContent = rcptCat === 'food' ? 'Food' : 'Drinks';
-  btn.className = 'toggle-btn '+(rcptCat==='food'?'active-food':'active-drinks');
-  btn.style.cssText = 'padding:0.75rem 0.6rem;font-size:0.7rem;min-width:72px;';
-}
-function addReceiptLine() {
-  const name = document.getElementById('rcpt-name').value.trim() || 'Item';
-  const amt  = parseFloat(document.getElementById('rcpt-amt').value);
-  if (!amt || amt <= 0) { showToast('Enter an amount for this line'); return; }
-  rcptLines.push({ id: Date.now()+Math.random(), name, amount: amt, category: rcptCat });
-  document.getElementById('rcpt-name').value = '';
-  document.getElementById('rcpt-amt').value  = '';
+function addReceiptLine(){
+  const name=document.getElementById('rcpt-name').value.trim()||'Item';
+  const amt=parseFloat(document.getElementById('rcpt-amt').value);
+  if(!amt||amt<=0){showToast('Enter an amount for this line');return;}
+  rcptLines.push({id:Date.now()+Math.random(),name,amount:amt,category:rcptCat});
+  document.getElementById('rcpt-name').value='';
+  document.getElementById('rcpt-amt').value='';
   renderRcptLines();
 }
-function toggleLineCategory(id) {
-  const l = rcptLines.find(x => x.id === id);
-  if (l) l.category = l.category === 'food' ? 'drinks' : 'food';
+function toggleLineCategory(id){
+  const l=rcptLines.find(x=>x.id===id);
+  if(l) l.category=l.category==='food'?'drinks':'food';
   renderRcptLines();
 }
-function removeRcptLine(id) {
-  rcptLines = rcptLines.filter(x => x.id !== id);
+function removeRcptLine(id){
+  rcptLines=rcptLines.filter(x=>x.id!==id);
   renderRcptLines();
 }
-function renderRcptLines() {
-  const sec = document.getElementById('rcpt-lines-section');
-  if (!rcptLines.length) { sec.style.display = 'none'; return; }
-  sec.style.display = 'block';
-  const fTotal = rcptLines.filter(l=>l.category==='food').reduce((s,l)=>s+l.amount,0);
-  const dTotal = rcptLines.filter(l=>l.category==='drinks').reduce((s,l)=>s+l.amount,0);
-  document.getElementById('rcpt-food-total').textContent   = fmtAmt(fTotal);
-  document.getElementById('rcpt-drinks-total').textContent = fmtAmt(dTotal);
-  document.getElementById('rcpt-lines-list').innerHTML = rcptLines.map(l=>`
+function renderRcptLines(){
+  const sec=document.getElementById('rcpt-lines-section');
+  if(!rcptLines.length){sec.style.display='none';return;}
+  sec.style.display='block';
+  const fTotal=rcptLines.filter(l=>l.category==='food').reduce((s,l)=>s+l.amount,0);
+  const dTotal=rcptLines.filter(l=>l.category==='drinks').reduce((s,l)=>s+l.amount,0);
+  document.getElementById('rcpt-food-total').textContent=fmtAmt(fTotal);
+  document.getElementById('rcpt-drinks-total').textContent=fmtAmt(dTotal);
+  document.getElementById('rcpt-lines-list').innerHTML=rcptLines.map(l=>`
     <div class="rcpt-line">
       <span class="rcpt-line-name">${esc(l.name)}</span>
       <span class="rcpt-line-amt">${fmtAmt(l.amount)}</span>
@@ -329,83 +379,302 @@ function renderRcptLines() {
       <button class="delete-btn" onclick="removeRcptLine(${l.id})">&#x2715;</button>
     </div>`).join('');
 }
-function addAllReceiptLines() {
-  if (!rcptLines.length) { showToast('No lines to add'); return; }
-  rcptLines.forEach(l => entries.push({ id: Date.now()+Math.random(), date: todayStr(), meal: rcptMeal, category: l.category, amount: l.amount, note: l.name }));
-  const n = rcptLines.length;
-  save(); showToast(n+' item'+(n===1?'':'s')+' added!'); clearReceipt(); renderToday();
+function addAllReceiptLines(){
+  if(!rcptLines.length){showToast('Add at least one line first');return;}
+  const restaurant=document.getElementById('rcpt-restaurant').value.trim();
+  const photoUrl=document.getElementById('rcpt-photo-url').value.trim();
+  const date=todayStr();
+  rcptLines.forEach(l=>{
+    entries.push({id:Date.now()+Math.random(),date,meal:rcptMeal,category:l.category,amount:l.amount,note:l.name,restaurant:restaurant||'',photoUrl:photoUrl||''});
+  });
+  const n=rcptLines.length;
+  save(); showToast(n+' item'+(n===1?'':'s')+' saved!'); clearReceipt(); renderToday();
 }
-function clearReceipt() {
-  rcptLines = [];
+function clearReceipt(){
+  rcptLines=[];
   renderRcptLines();
-  document.getElementById('rcpt-name').value = '';
-  document.getElementById('rcpt-amt').value  = '';
+  document.getElementById('rcpt-restaurant').value='';
+  document.getElementById('rcpt-name').value='';
+  document.getElementById('rcpt-amt').value='';
+  document.getElementById('rcpt-photo-url').value='';
+  selectRcptMeal('lunch');
 }
 
-function deleteEntry(id, fromHistory) {
-  if (!confirm('Remove this entry?')) return;
-  entries = entries.filter(e => e.id !== id);
-  save();
-  renderToday();
-  if (fromHistory) renderHistory();
+// ── DELETE ────────────────────────────────────────────
+function deleteEntry(id,fromHistory){
+  if(!confirm('Remove this entry?'))return;
+  entries=entries.filter(e=>e.id!==id);
+  save(); renderToday();
+  if(fromHistory) renderHistory();
 }
 
-function renderToday() {
-  const today  = todayStr();
-  const todayE = entries.filter(e=>e.date===today);
-  const food   = todayE.filter(e=>e.category==='food').reduce((s,e)=>s+e.amount,0);
-  const drinks = todayE.filter(e=>e.category==='drinks').reduce((s,e)=>s+e.amount,0);
-  const lunch  = todayE.filter(e=>e.category==='food'&&e.meal==='lunch').reduce((s,e)=>s+e.amount,0);
-  const dinner = todayE.filter(e=>e.category==='food'&&e.meal==='dinner').reduce((s,e)=>s+e.amount,0);
-  const rem    = DAILY_BUDGET - food;
-  const pct    = Math.max(0,Math.min(100,(rem/DAILY_BUDGET)*100));
+// ── TODAY ─────────────────────────────────────────────
+function renderToday(){
+  const today=todayStr();
+  const todayE=entries.filter(e=>e.date===today);
+  const food=todayE.filter(e=>e.category==='food').reduce((s,e)=>s+e.amount,0);
+  const drinks=todayE.filter(e=>e.category==='drinks').reduce((s,e)=>s+e.amount,0);
+  const lunch=todayE.filter(e=>e.category==='food'&&e.meal==='lunch').reduce((s,e)=>s+e.amount,0);
+  const dinner=todayE.filter(e=>e.category==='food'&&e.meal==='dinner').reduce((s,e)=>s+e.amount,0);
+  const rem=DAILY_BUDGET-food;
+  const pct=Math.max(0,Math.min(100,(rem/DAILY_BUDGET)*100));
 
-  document.getElementById('today-remaining').textContent   = fmtAmt(rem);
-  document.getElementById('header-remaining').textContent  = fmtAmt(rem);
-  document.getElementById('today-progress').style.width    = pct+'%';
-  document.getElementById('today-progress').style.background = pct<25?'#e8603c':pct<60?'#c97d18':'#1a6b45';
-  document.getElementById('today-spent-label').textContent = fmtAmt(food)+' spent of '+fmtAmt(DAILY_BUDGET);
-  document.getElementById('today-lunch').textContent       = fmtAmt(lunch);
-  document.getElementById('today-dinner').textContent      = fmtAmt(dinner);
-  document.getElementById('today-drinks').textContent      = fmtAmt(drinks);
+  document.getElementById('today-remaining').textContent=fmtAmt(rem);
+  document.getElementById('header-remaining').textContent=fmtAmt(rem);
+  document.getElementById('today-progress').style.width=pct+'%';
+  document.getElementById('today-progress').style.background=pct<25?'#e8603c':pct<60?'#c97d18':'#1a6b45';
+  document.getElementById('today-spent-label').textContent=fmtAmt(food)+' spent of '+fmtAmt(DAILY_BUDGET);
+  document.getElementById('today-lunch').textContent=fmtAmt(lunch);
+  document.getElementById('today-dinner').textContent=fmtAmt(dinner);
+  document.getElementById('today-drinks').textContent=fmtAmt(drinks);
+  const allDrinks=entries.filter(e=>e.category==='drinks').reduce((s,e)=>s+e.amount,0);
+  const days=new Set(entries.map(e=>e.date)).size;
+  document.getElementById('trip-total-drinks').textContent=fmtAmt(allDrinks);
+  document.getElementById('trip-days-label').textContent='Across '+days+' day'+(days===1?'':'s');
 
-  const allDrinks = entries.filter(e=>e.category==='drinks').reduce((s,e)=>s+e.amount,0);
-  const days      = new Set(entries.map(e=>e.date)).size;
-  document.getElementById('trip-total-drinks').textContent = fmtAmt(allDrinks);
-  document.getElementById('trip-days-label').textContent   = 'Across '+days+' day'+(days===1?'':'s');
-
-  const list = document.getElementById('today-entries-list');
-  if (!todayE.length) { list.innerHTML='<div class="empty-state"><div class="empty-icon">🌴</div>No entries yet. Hit Add to get started!</div>'; return; }
-  list.innerHTML = [...todayE].reverse().map(e=>`
-    <div class="entry-item">
-      <div style="flex:1;">
-        <div style="display:flex;gap:0.4rem;align-items:center;margin-bottom:0.3rem;flex-wrap:wrap;">
+  const list=document.getElementById('today-entries-list');
+  if(!todayE.length){list.innerHTML='<div class="empty-state"><div class="empty-icon">🌴</div>No entries yet. Add a receipt to get started!</div>';return;}
+  list.innerHTML=[...todayE].reverse().map(e=>{
+    const photoBtn=e.photoUrl?`<a href="${esc(e.photoUrl)}" target="_blank" style="font-size:0.7rem;font-weight:700;color:var(--ocean);text-decoration:none;white-space:nowrap;">View receipt</a>`:'';
+    const restLabel=e.restaurant?`<span style="font-size:0.72rem;font-weight:600;color:var(--muted);">${esc(e.restaurant)}</span>`:'';
+    return `<div class="entry-item">
+      <div style="flex:1;min-width:0;">
+        <div style="display:flex;gap:0.4rem;align-items:center;margin-bottom:0.25rem;flex-wrap:wrap;">
           <span class="pill pill-${e.meal}">${e.meal}</span>
           <span class="pill pill-${e.category}">${e.category==='food'?'Food':'Drinks'}</span>
+          <span class="pill ${e.synced?'pill-synced':'pill-unsynced'}">${e.synced?'Synced':'Not synced'}</span>
         </div>
-        <div style="font-size:0.78rem;font-weight:500;color:var(--muted);">${esc(e.note||'No note')}</div>
+        <div style="font-size:0.78rem;font-weight:600;color:var(--text);margin-bottom:0.15rem;">${esc(e.note||'No note')}</div>
+        <div style="display:flex;gap:0.6rem;align-items:center;flex-wrap:wrap;">${restLabel}${photoBtn}</div>
       </div>
-      <div style="display:flex;align-items:center;gap:0.6rem;">
+      <div style="display:flex;align-items:center;gap:0.6rem;padding-left:0.5rem;flex-shrink:0;">
         <div style="font-weight:800;font-size:1rem;">${fmtAmt(e.amount)}</div>
         <button class="delete-btn" onclick="deleteEntry(${e.id})">&#x2715;</button>
       </div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
 }
 
-function renderHistory() {
-  const days = [...new Set(entries.map(e=>e.date))].sort().reverse();
-  const tabs = document.getElementById('day-tabs');
-  if (!days.length) { tabs.innerHTML=''; document.getElementById('history-content').innerHTML='<div class="empty-state"><div class="empty-icon">📋</div>No entries yet!</div>'; return; }
-  if (!selDay||!days.includes(selDay)) selDay = days[0];
-  tabs.innerHTML = days.map(d=>`<button class="day-pill ${d===selDay?'active':''}" onclick="selectDay('${d}')">${fmtDate(d)}</button>`).join('');
+// ── CHARTS ────────────────────────────────────────────
+function getDayData(){
+  const days=[...new Set(entries.map(e=>e.date))].sort();
+  return days.map(d=>{
+    const dayE=entries.filter(e=>e.date===d);
+    return{
+      date:d,
+      label:fmtDate(d),
+      food:dayE.filter(e=>e.category==='food').reduce((s,e)=>s+e.amount,0),
+      drinks:dayE.filter(e=>e.category==='drinks').reduce((s,e)=>s+e.amount,0),
+      lunch:dayE.filter(e=>e.category==='food'&&e.meal==='lunch').reduce((s,e)=>s+e.amount,0),
+      dinner:dayE.filter(e=>e.category==='food'&&e.meal==='dinner').reduce((s,e)=>s+e.amount,0),
+    };
+  });
+}
+
+function renderCharts(){
+  const data=getDayData();
+
+  // Summary tiles
+  const totalFood=data.reduce((s,d)=>s+d.food,0);
+  const totalDrinks=data.reduce((s,d)=>s+d.drinks,0);
+  const avgFood=data.length?totalFood/data.length:0;
+  document.getElementById('cs-days').textContent=data.length;
+  document.getElementById('cs-food').textContent=fmtAmt(totalFood);
+  document.getElementById('cs-drinks').textContent=fmtAmt(totalDrinks);
+  document.getElementById('cs-avg').textContent=fmtAmt(avgFood);
+
+  if(!data.length) return;
+
+  // ── 1. Daily bars ──
+  const maxFood=Math.max(...data.map(d=>d.food),DAILY_BUDGET);
+  document.getElementById('daily-bars').innerHTML=data.map(d=>{
+    const pct=Math.min(100,(d.food/maxFood)*100);
+    const budgetPct=(DAILY_BUDGET/maxFood)*100;
+    const over=d.food>DAILY_BUDGET;
+    const barColor=over?'#e8603c':d.food>DAILY_BUDGET*0.85?'#c97d18':'#1a6b45';
+    return `<div class="bar-row">
+      <div class="bar-label">${d.label.split(',')[0]}</div>
+      <div class="bar-track">
+        <div class="bar-fill" style="width:${pct}%;background:${barColor};">
+          <span class="bar-amt">${fmtAmt(d.food)}</span>
+        </div>
+        <div class="bar-budget-line" style="left:${budgetPct}%;"></div>
+      </div>
+    </div>`;
+  }).join('');
+
+  // ── 2. Stacked canvas chart ──
+  const wrap=document.getElementById('stacked-wrap');
+  wrap.style.display='block';
+  const canvas=document.getElementById('stacked-chart');
+  const ctx=canvas.getContext('2d');
+  const W=canvas.offsetWidth||300;
+  const H=220;
+  canvas.width=W; canvas.height=H;
+
+  const pad={top:16,right:12,bottom:40,left:48};
+  const chartW=W-pad.left-pad.right;
+  const chartH=H-pad.top-pad.bottom;
+  const maxVal=Math.max(...data.map(d=>d.food+d.drinks),DAILY_BUDGET)*1.1;
+  const barW=Math.min(36,chartW/data.length-8);
+
+  ctx.clearRect(0,0,W,H);
+
+  // grid lines
+  ctx.strokeStyle='rgba(0,0,0,0.06)'; ctx.lineWidth=1;
+  [0,0.25,0.5,0.75,1].forEach(t=>{
+    const y=pad.top+chartH*(1-t);
+    ctx.beginPath(); ctx.moveTo(pad.left,y); ctx.lineTo(pad.left+chartW,y); ctx.stroke();
+    ctx.fillStyle='#9ca3af'; ctx.font='600 9px Montserrat,sans-serif'; ctx.textAlign='right';
+    ctx.fillText('$'+Math.round(maxVal*t),pad.left-4,y+3);
+  });
+
+  // budget line
+  const budgetY=pad.top+chartH*(1-DAILY_BUDGET/maxVal);
+  ctx.setLineDash([4,3]); ctx.strokeStyle='rgba(0,0,0,0.2)'; ctx.lineWidth=1.5;
+  ctx.beginPath(); ctx.moveTo(pad.left,budgetY); ctx.lineTo(pad.left+chartW,budgetY); ctx.stroke();
+  ctx.setLineDash([]);
+
+  // bars
+  data.forEach((d,i)=>{
+    const x=pad.left+(chartW/data.length)*i+(chartW/data.length-barW)/2;
+
+    // drinks segment (top)
+    if(d.drinks>0){
+      const dH=(d.drinks/maxVal)*chartH;
+      const fH=(d.food/maxVal)*chartH;
+      const dy=pad.top+chartH-fH-dH;
+      ctx.fillStyle='#e8603c';
+      roundRect(ctx,x,dy,barW,dH,3);
+    }
+    // food segment (bottom)
+    if(d.food>0){
+      const fH=(d.food/maxVal)*chartH;
+      const fy=pad.top+chartH-fH;
+      ctx.fillStyle=d.food>DAILY_BUDGET?'#e8603c':'#1a6b45';
+      roundRect(ctx,x,fy,barW,fH,3);
+    }
+
+    // x label
+    ctx.fillStyle='#6b7280'; ctx.font='600 9px Montserrat,sans-serif'; ctx.textAlign='center';
+    ctx.fillText(d.label.split(',')[0],x+barW/2,H-pad.bottom+14);
+  });
+
+  // ── 3. Lunch vs Dinner split ──
+  const totalLunch=data.reduce((s,d)=>s+d.lunch,0);
+  const totalDinner=data.reduce((s,d)=>s+d.dinner,0);
+  const totalMeal=totalLunch+totalDinner||1;
+  const lPct=Math.round((totalLunch/totalMeal)*100);
+  const dPct=100-lPct;
+  document.getElementById('meal-split-chart').innerHTML=`
+    <div style="margin-bottom:0.6rem;">
+      <div style="display:flex;justify-content:space-between;font-size:0.7rem;font-weight:700;margin-bottom:0.3rem;">
+        <span style="color:var(--ocean);">Lunch ${lPct}% — ${fmtAmt(totalLunch)}</span>
+        <span style="color:var(--palm);">Dinner ${dPct}% — ${fmtAmt(totalDinner)}</span>
+      </div>
+      <div style="height:24px;border-radius:8px;overflow:hidden;display:flex;">
+        <div style="width:${lPct}%;background:var(--ocean);transition:width 0.5s;"></div>
+        <div style="flex:1;background:var(--palm);"></div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.6rem;margin-top:0.75rem;">
+      ${data.map(d=>`
+        <div style="background:var(--bg);border-radius:10px;padding:0.55rem 0.75rem;border:1px solid var(--border);">
+          <div style="font-size:0.6rem;font-weight:800;color:var(--muted);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:0.2rem;">${d.label.split(',')[0]}</div>
+          <div style="display:flex;gap:0.4rem;font-size:0.72rem;font-weight:700;">
+            <span style="color:var(--ocean);">L: ${fmtAmt(d.lunch)}</span>
+            <span style="color:var(--palm);">D: ${fmtAmt(d.dinner)}</span>
+          </div>
+        </div>`).join('')}
+    </div>`;
+
+  // ── 4. Most expensive days ──
+  const sorted=[...data].sort((a,b)=>(b.food+b.drinks)-(a.food+a.drinks));
+  const topMax=sorted[0]?sorted[0].food+sorted[0].drinks:1;
+  document.getElementById('expensive-days-chart').innerHTML=sorted.map((d,i)=>{
+    const total=d.food+d.drinks;
+    const pct=(total/topMax)*100;
+    const medals=['🥇','🥈','🥉'];
+    return `<div class="bar-row" style="margin-bottom:0.65rem;">
+      <div class="bar-label" style="width:60px;font-size:0.65rem;">${medals[i]||''} ${d.label.split(',')[0]}</div>
+      <div class="bar-track">
+        <div class="bar-fill" style="width:${pct}%;background:${i===0?'#c97d18':i===1?'#6b7280':'#b0b0b0'};">
+          <span class="bar-amt">${fmtAmt(total)}</span>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function roundRect(ctx,x,y,w,h,r){
+  if(h<=0)return;
+  r=Math.min(r,h/2,w/2);
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);
+  ctx.lineTo(x+w-r,y);
+  ctx.quadraticCurveTo(x+w,y,x+w,y+r);
+  ctx.lineTo(x+w,y+h-r);
+  ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+  ctx.lineTo(x+r,y+h);
+  ctx.quadraticCurveTo(x,y+h,x,y+h-r);
+  ctx.lineTo(x,y+r);
+  ctx.quadraticCurveTo(x,y,x+r,y);
+  ctx.closePath();
+  ctx.fill();
+}
+
+// ── HISTORY ───────────────────────────────────────────
+function renderHistory(){
+  const days=[...new Set(entries.map(e=>e.date))].sort().reverse();
+  const tabs=document.getElementById('day-tabs');
+  if(!days.length){tabs.innerHTML='';document.getElementById('history-content').innerHTML='<div class="empty-state"><div class="empty-icon">📋</div>No entries yet!</div>';return;}
+  if(!selDay||!days.includes(selDay)) selDay=days[0];
+  tabs.innerHTML=days.map(d=>`<button class="day-pill ${d===selDay?'active':''}" onclick="selectDay('${d}')">${fmtDate(d)}</button>`).join('');
   renderDayHistory(selDay);
 }
-function selectDay(d) { selDay=d; renderHistory(); }
-function renderDayHistory(date) {
-  const dayE   = entries.filter(e=>e.date===date);
-  const food   = dayE.filter(e=>e.category==='food').reduce((s,e)=>s+e.amount,0);
-  const drinks = dayE.filter(e=>e.category==='drinks').reduce((s,e)=>s+e.amount,0);
-  document.getElementById('history-content').innerHTML = `
+function selectDay(d){selDay=d;renderHistory();}
+function renderDayHistory(date){
+  const dayE=entries.filter(e=>e.date===date);
+  const food=dayE.filter(e=>e.category==='food').reduce((s,e)=>s+e.amount,0);
+  const drinks=dayE.filter(e=>e.category==='drinks').reduce((s,e)=>s+e.amount,0);
+
+  const restaurants={};
+  dayE.forEach(e=>{
+    const key=e.restaurant||'(no restaurant)';
+    if(!restaurants[key]) restaurants[key]={entries:[],photoUrl:e.photoUrl||''};
+    restaurants[key].entries.push(e);
+    if(e.photoUrl&&!restaurants[key].photoUrl) restaurants[key].photoUrl=e.photoUrl;
+  });
+
+  const entriesHtml=Object.entries(restaurants).map(([name,group])=>{
+    const photoBtn=group.photoUrl
+      ?`<a href="${esc(group.photoUrl)}" target="_blank" style="font-size:0.72rem;font-weight:700;color:var(--ocean);text-decoration:none;">View receipt photo</a>`
+      :`<span style="font-size:0.72rem;color:var(--muted);">No photo</span>`;
+    const linesHtml=[...group.entries].reverse().map(e=>`
+      <div class="entry-item" style="padding:0.65rem 0;">
+        <div style="flex:1;min-width:0;">
+          <div style="display:flex;gap:0.4rem;align-items:center;flex-wrap:wrap;margin-bottom:0.15rem;">
+            <span class="pill pill-${e.meal}">${e.meal}</span>
+            <span class="pill pill-${e.category}">${e.category==='food'?'Food':'Drinks'}</span>
+            <span class="pill ${e.synced?'pill-synced':'pill-unsynced'}">${e.synced?'Synced':'Not synced'}</span>
+          </div>
+          <div style="font-size:0.78rem;font-weight:600;color:var(--text);">${esc(e.note||'No note')}</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:0.5rem;flex-shrink:0;padding-left:0.4rem;">
+          <div style="font-weight:800;font-size:0.95rem;">${fmtAmt(e.amount)}</div>
+          <button class="delete-btn" onclick="deleteEntry(${e.id},true)">&#x2715;</button>
+        </div>
+      </div>`).join('');
+    return `<div style="margin-bottom:0.75rem;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.3rem;flex-wrap:wrap;gap:0.4rem;">
+        <div style="font-size:0.78rem;font-weight:800;color:var(--text);">${esc(name)}</div>
+        ${photoBtn}
+      </div>
+      <div class="card" style="padding:0 1rem;margin-bottom:0;">${linesHtml}</div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('history-content').innerHTML=`
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:1rem;">
       <div class="stat-card" style="background:var(--palm-light);margin-bottom:0;">
         <div class="stat-label" style="color:var(--palm);">Budget left</div>
@@ -416,58 +685,53 @@ function renderDayHistory(date) {
         <div style="font-size:1.3rem;font-weight:800;color:var(--coral);">${fmtAmt(drinks)}</div>
       </div>
     </div>
-    <div class="card" style="padding:0 1.25rem;">
-      ${!dayE.length?'<div class="empty-state">No entries for this day</div>':
-        [...dayE].reverse().map(e=>`
-          <div class="entry-item">
-            <div style="flex:1;">
-              <div style="display:flex;gap:0.4rem;align-items:center;margin-bottom:0.3rem;flex-wrap:wrap;">
-                <span class="pill pill-${e.meal}">${e.meal}</span>
-                <span class="pill pill-${e.category}">${e.category==='food'?'Food':'Drinks'}</span>
-              </div>
-              <div style="font-size:0.78rem;font-weight:500;color:var(--muted);">${esc(e.note||'No note')}</div>
-            </div>
-            <div style="display:flex;align-items:center;gap:0.6rem;">
-              <div style="font-weight:800;font-size:1rem;">${fmtAmt(e.amount)}</div>
-              <button class="delete-btn" onclick="deleteEntry(${e.id}, true)">&#x2715;</button>
-            </div>
-          </div>`).join('')}
-    </div>`;
+    ${dayE.length?entriesHtml:'<div class="empty-state">No entries for this day</div>'}`;
 }
 
-function exportCSV() {
-  if (!entries.length) { showToast('No data to export yet'); return; }
-  const rows = entries.map(e=>`${e.date},${e.meal},${e.category},${e.amount.toFixed(2)},"${(e.note||'').replace(/"/g,'""')}"`).join('\n');
-  const a = Object.assign(document.createElement('a'),{ href: URL.createObjectURL(new Blob(['Date,Meal,Category,Amount (FJD),Note\n'+rows],{type:'text/csv'})), download:'holiday-meals-'+todayStr()+'.csv' });
-  a.click(); showToast('CSV downloaded!');
-}
-
-function syncGoogleSheets() {
-  const toSync = entries.filter(e=>!e.synced);
-  if (!toSync.length) { showToast('Nothing new to sync'); return; }
-  toSync.forEach(e => {
-    fetch(FORM_ACTION, { method:'POST', mode:'no-cors', body: new URLSearchParams({
-      [FORM_FIELDS.date]:     e.date,
-      [FORM_FIELDS.meal]:     e.meal.charAt(0).toUpperCase()+e.meal.slice(1),
-      [FORM_FIELDS.category]: e.category.charAt(0).toUpperCase()+e.category.slice(1),
-      [FORM_FIELDS.amount]:   e.amount.toFixed(2),
-      [FORM_FIELDS.note]:     e.note||''
-    })});
-    e.synced = true;
+// ── SYNC ──────────────────────────────────────────────
+function buildFormBody(e){
+  const noteParts=[e.restaurant,e.note,e.photoUrl].filter(Boolean);
+  return new URLSearchParams({
+    [FORM_FIELDS.date]:    e.date,
+    [FORM_FIELDS.meal]:    e.meal.charAt(0).toUpperCase()+e.meal.slice(1),
+    [FORM_FIELDS.category]:e.category.charAt(0).toUpperCase()+e.category.slice(1),
+    [FORM_FIELDS.amount]:  e.amount.toFixed(2),
+    [FORM_FIELDS.note]:    noteParts.join(' | ')
   });
+}
+function syncGoogleSheets(){
+  const toSync=entries.filter(e=>!e.synced);
+  if(!toSync.length){showToast('All entries are already synced');return;}
+  toSync.forEach(e=>{fetch(FORM_ACTION,{method:'POST',mode:'no-cors',body:buildFormBody(e)});e.synced=true;});
+  save(); showToast(toSync.length+' entr'+(toSync.length===1?'y':'ies')+' sent to Sheets!'); renderToday();
+}
+function fullResync(){
+  if(!entries.length){showToast('No entries to sync');return;}
+  if(!confirm('Re-send ALL '+entries.length+' entries to Google Sheets? Clear your sheet first to avoid duplicates.'))return;
+  entries.forEach(e=>{e.synced=false;});
   save();
-  showToast(toSync.length+' entr'+(toSync.length===1?'y':'ies')+' sent to Sheets!');
+  entries.forEach(e=>{fetch(FORM_ACTION,{method:'POST',mode:'no-cors',body:buildFormBody(e)});e.synced=true;});
+  save(); showToast('All '+entries.length+' entries re-sent!'); renderHistory();
 }
 
-function clearAllData() {
-  if (!confirm('Are you sure you want to delete everything?')) return;
-  if (!confirm('This will wipe all entries for the whole trip. No undoing this. Really delete?')) return;
-  entries=[]; save(); renderToday(); renderHistory(); showToast('All data cleared');
+// ── EXPORT ────────────────────────────────────────────
+function exportCSV(){
+  if(!entries.length){showToast('No data to export yet');return;}
+  const header='Date,Meal,Category,Amount (FJD),Item,Restaurant,Photo URL\n';
+  const rows=entries.map(e=>`${e.date},${e.meal},${e.category},${e.amount.toFixed(2)},"${(e.note||'').replace(/"/g,'""')}","${(e.restaurant||'').replace(/"/g,'""')}","${(e.photoUrl||'').replace(/"/g,'""')}"`).join('\n');
+  Object.assign(document.createElement('a'),{href:URL.createObjectURL(new Blob([header+rows],{type:'text/csv'})),download:'holiday-meals-'+todayStr()+'.csv'}).click();
+  showToast('CSV downloaded!');
 }
 
-// Init
-document.getElementById('date-input').value = todayStr();
-document.getElementById('header-date').textContent = new Date().toLocaleDateString('en-FJ',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+// ── DANGER ────────────────────────────────────────────
+function clearAllData(){
+  if(!confirm('Are you sure you want to delete everything?'))return;
+  if(!confirm('This will wipe all entries for the whole trip. No undoing this. Really delete?'))return;
+  entries=[];save();renderToday();renderHistory();showToast('All data cleared');
+}
+
+// ── INIT ──────────────────────────────────────────────
+document.getElementById('header-date').textContent=new Date().toLocaleDateString('en-FJ',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
 renderToday();
 </script>
 </body>
