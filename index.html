@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Holiday Meals Tracker</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --palm: #1a6b45;
+    --palm-light: #e8f5ef;
+    --sand: #f5ede0;
+    --coral: #e8603c;
+    --coral-light: #fdf0eb;
+    --ocean: #1b5e8c;
+    --ocean-light: #e3f0f8;
+    --gold: #c97d18;
+    --gold-light: #fdf3e0;
+    --text: #1c1c1e;
+    --muted: #6b7280;
+    --surface: #ffffff;
+    --bg: #faf8f5;
+    --border: rgba(0,0,0,0.08);
+  }
+  * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
+  body { font-family: 'Montserrat', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; margin: 0; padding: 0; }
+  .header { background: linear-gradient(135deg, var(--palm) 0%, #0f4a2e 100%); color: white; padding: 1.5rem 1.25rem 2.5rem; position: relative; overflow: hidden; }
+  .header::before { content: ''; position: absolute; top: -20px; right: -30px; width: 180px; height: 180px; background: rgba(255,255,255,0.05); border-radius: 50%; }
+  .header::after { content: ''; position: absolute; bottom: -40px; left: 20px; width: 120px; height: 120px; background: rgba(255,255,255,0.04); border-radius: 50%; }
+  .tab-bar { background: var(--surface); border-bottom: 1px solid var(--border); display: flex; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+  .tab-btn { flex: 1; padding: 0.9rem 0.4rem; font-family: 'Montserrat', sans-serif; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); background: none; border: none; border-bottom: 3px solid transparent; cursor: pointer; transition: all 0.2s; }
+  .tab-btn.active { color: var(--palm); border-bottom-color: var(--palm); }
+  .tab-content { display: none; padding: 1.25rem; }
+  .tab-content.active { display: block; }
+  .card { background: var(--surface); border-radius: 16px; border: 1px solid var(--border); padding: 1.25rem; margin-bottom: 1rem; }
+  .stat-card { border-radius: 14px; padding: 1rem 1.1rem; margin-bottom: 0.75rem; }
+  .stat-label { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.3rem; }
+  .stat-value { font-size: 1.9rem; font-weight: 800; line-height: 1; }
+  .stat-sub { font-size: 0.73rem; font-weight: 500; margin-top: 0.25rem; opacity: 0.75; }
+  .progress-bar { height: 8px; border-radius: 99px; background: rgba(0,0,0,0.1); margin-top: 0.75rem; overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 99px; transition: width 0.4s ease; }
+  .big-btn { width: 100%; padding: 1rem 1.5rem; border-radius: 14px; border: none; font-family: 'Montserrat', sans-serif; font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: all 0.15s; display: flex; align-items: center; justify-content: center; gap: 0.5rem; margin-bottom: 0.75rem; letter-spacing: 0.01em; }
+  .big-btn:active { transform: scale(0.97); }
+  .btn-palm { background: var(--palm); color: white; }
+  .btn-ocean { background: var(--ocean); color: white; }
+  .btn-outline { background: transparent; border: 2px solid var(--border); color: var(--text); }
+  .toggle-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-bottom: 1rem; }
+  .toggle-btn { padding: 0.9rem 0.5rem; border-radius: 12px; border: 2px solid var(--border); font-family: 'Montserrat', sans-serif; font-size: 0.78rem; font-weight: 700; cursor: pointer; transition: all 0.15s; background: var(--surface); color: var(--muted); text-align: center; }
+  .toggle-btn.active-lunch { border-color: var(--ocean); background: var(--ocean-light); color: var(--ocean); }
+  .toggle-btn.active-dinner { border-color: var(--palm); background: var(--palm-light); color: var(--palm); }
+  .toggle-btn.active-food { border-color: var(--palm); background: var(--palm-light); color: var(--palm); }
+  .toggle-btn.active-drinks { border-color: var(--coral); background: var(--coral-light); color: var(--coral); }
+  input[type="number"], input[type="text"], input[type="date"] { width: 100%; padding: 0.85rem 1rem; border-radius: 12px; border: 1.5px solid var(--border); font-family: 'Montserrat', sans-serif; font-size: 0.95rem; font-weight: 500; background: var(--bg); color: var(--text); outline: none; transition: border-color 0.15s; margin-bottom: 0.75rem; }
+  input:focus { border-color: var(--palm); }
+  .entry-item { display: flex; justify-content: space-between; align-items: flex-start; padding: 0.9rem 0; border-bottom: 1px solid var(--border); }
+  .entry-item:last-child { border-bottom: none; }
+  .pill { display: inline-block; padding: 0.18rem 0.55rem; border-radius: 99px; font-size: 0.6rem; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase; }
+  .pill-food { background: var(--palm-light); color: var(--palm); }
+  .pill-drinks { background: var(--coral-light); color: var(--coral); }
+  .pill-lunch { background: var(--ocean-light); color: var(--ocean); }
+  .pill-dinner { background: var(--palm-light); color: var(--palm); }
+  .delete-btn { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 1rem; padding: 0.25rem; line-height: 1; opacity: 0.4; transition: opacity 0.15s; }
+  .delete-btn:hover { opacity: 1; color: var(--coral); }
+  .section-label { font-size: 0.6rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.55rem; margin-top: 1.1rem; }
+  .section-label:first-child { margin-top: 0; }
+  .toast { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(100px); background: #1c1c1e; color: white; padding: 0.75rem 1.5rem; border-radius: 99px; font-family: 'Montserrat', sans-serif; font-size: 0.8rem; font-weight: 700; z-index: 1000; transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); pointer-events: none; white-space: nowrap; }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+  .empty-state { text-align: center; padding: 2rem 1rem; color: var(--muted); font-size: 0.82rem; font-weight: 500; }
+  .empty-icon { font-size: 2.5rem; margin-bottom: 0.5rem; }
+  .day-scroll { display: flex; gap: 0.5rem; overflow-x: auto; padding-bottom: 0.5rem; margin-bottom: 1rem; scrollbar-width: none; }
+  .day-scroll::-webkit-scrollbar { display: none; }
+  .day-pill { padding: 0.42rem 1rem; border-radius: 99px; border: 1.5px solid var(--border); font-family: 'Montserrat', sans-serif; font-size: 0.68rem; font-weight: 700; cursor: pointer; white-space: nowrap; background: var(--surface); color: var(--muted); transition: all 0.15s; flex-shrink: 0; }
+  .day-pill.active { background: var(--palm); color: white; border-color: var(--palm); }
+  .rcpt-line { display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 0; border-bottom: 1px dashed var(--border); }
+  .rcpt-line:last-child { border-bottom: none; }
+  .rcpt-line-name { font-size: 0.8rem; font-weight: 600; flex: 1; color: var(--text); }
+  .rcpt-line-amt { font-size: 0.85rem; font-weight: 800; color: var(--text); white-space: nowrap; }
+  .line-cat-btn { padding: 0.25rem 0.55rem; border-radius: 99px; border: 1.5px solid var(--border); font-family: 'Montserrat', sans-serif; font-size: 0.58rem; font-weight: 800; text-transform: uppercase; cursor: pointer; background: var(--surface); color: var(--muted); transition: all 0.15s; white-space: nowrap; letter-spacing: 0.04em; }
+  .line-cat-btn.is-food { background: var(--palm-light); color: var(--palm); border-color: var(--palm); }
+  .line-cat-btn.is-drinks { background: var(--coral-light); color: var(--coral); border-color: var(--coral); }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div style="position:relative;z-index:1;">
+    <div style="font-size:0.6rem;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;opacity:0.65;margin-bottom:0.3rem;">Holiday Tracker</div>
+    <h1 style="font-size:1.75rem;font-weight:900;margin:0 0 0.15rem;line-height:1.1;">Meal Expenses</h1>
+    <p style="margin:0;opacity:0.7;font-size:0.78rem;font-weight:500;" id="header-date"></p>
+    <div style="margin-top:1rem;display:flex;gap:0.75rem;align-items:flex-end;">
+      <div>
+        <div style="font-size:0.6rem;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;opacity:0.65;">Daily budget</div>
+        <div style="font-size:1.45rem;font-weight:900;">$332 FJD</div>
+      </div>
+      <div style="margin-left:auto;text-align:right;">
+        <div style="font-size:0.6rem;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;opacity:0.65;">Remaining today</div>
+        <div style="font-size:1.45rem;font-weight:900;" id="header-remaining">$332.00</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="tab-bar">
+  <button class="tab-btn active" onclick="switchTab('today',this)">Today</button>
+  <button class="tab-btn" onclick="switchTab('add',this)">+ Add</button>
+  <button class="tab-btn" onclick="switchTab('receipt',this)">Receipt</button>
+  <button class="tab-btn" onclick="switchTab('history',this)">History</button>
+</div>
+
+<!-- TODAY -->
+<div id="tab-today" class="tab-content active">
+  <div class="section-label">Budget status</div>
+  <div class="stat-card" style="background:var(--palm-light);">
+    <div class="stat-label" style="color:var(--palm);">Daily Remaining (Food)</div>
+    <div class="stat-value" style="color:var(--palm);" id="today-remaining">$332.00</div>
+    <div class="progress-bar"><div class="progress-fill" id="today-progress" style="background:var(--palm);width:100%;"></div></div>
+    <div class="stat-sub" style="color:var(--palm);" id="today-spent-label">$0.00 spent of $332.00</div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:0.75rem;">
+    <div class="stat-card" style="background:var(--ocean-light);margin-bottom:0;">
+      <div class="stat-label" style="color:var(--ocean);">Lunch</div>
+      <div class="stat-value" style="color:var(--ocean);font-size:1.35rem;" id="today-lunch">$0.00</div>
+    </div>
+    <div class="stat-card" style="background:var(--palm-light);margin-bottom:0;">
+      <div class="stat-label" style="color:var(--palm);">Dinner</div>
+      <div class="stat-value" style="color:var(--palm);font-size:1.35rem;" id="today-dinner">$0.00</div>
+    </div>
+  </div>
+  <div class="stat-card" style="background:var(--coral-light);">
+    <div class="stat-label" style="color:var(--coral);">Drinks and Coffees Today</div>
+    <div class="stat-value" style="color:var(--coral);" id="today-drinks">$0.00</div>
+    <div class="stat-sub" style="color:var(--coral);">Out of pocket</div>
+  </div>
+  <div class="section-label">Whole trip extra bill</div>
+  <div class="stat-card" style="background:var(--gold-light);">
+    <div class="stat-label" style="color:var(--gold);">Total Drinks and Coffees</div>
+    <div class="stat-value" style="color:var(--gold);" id="trip-total-drinks">$0.00</div>
+    <div class="stat-sub" style="color:var(--gold);" id="trip-days-label">Across 0 days</div>
+  </div>
+  <div class="section-label">Today's entries</div>
+  <div class="card" style="padding:0 1.25rem;">
+    <div id="today-entries-list"><div class="empty-state"><div class="empty-icon">🌴</div>No entries yet. Hit Add to get started!</div></div>
+  </div>
+</div>
+
+<!-- ADD -->
+<div id="tab-add" class="tab-content">
+  <div class="section-label">Meal</div>
+  <div class="toggle-grid">
+    <button class="toggle-btn active-lunch" id="meal-lunch" onclick="selectMeal('lunch')">Lunch</button>
+    <button class="toggle-btn" id="meal-dinner" onclick="selectMeal('dinner')">Dinner</button>
+  </div>
+  <div class="section-label">Category</div>
+  <div class="toggle-grid">
+    <button class="toggle-btn active-food" id="cat-food" onclick="selectCat('food')">Food (budget)</button>
+    <button class="toggle-btn" id="cat-drinks" onclick="selectCat('drinks')">Drinks / Coffee</button>
+  </div>
+  <div class="section-label">Amount (FJD)</div>
+  <input type="number" id="amount-input" placeholder="0.00" inputmode="decimal" step="0.01" min="0">
+  <div class="section-label">Note (optional)</div>
+  <input type="text" id="note-input" placeholder="e.g. grilled fish, cocktails">
+  <div class="section-label">Date</div>
+  <input type="date" id="date-input">
+  <button class="big-btn btn-palm" onclick="addEntry()">Add Entry</button>
+  <button class="big-btn btn-outline" onclick="clearForm()">Clear</button>
+</div>
+
+<!-- RECEIPT -->
+<div id="tab-receipt" class="tab-content">
+  <p style="font-size:0.82rem;font-weight:500;color:var(--muted);margin:0 0 1rem;line-height:1.6;">
+    Enter each line from your receipt. Tap the green or red pill to toggle it between Food and Drinks, then hit Add All to log everything at once.
+  </p>
+
+  <div class="section-label">Which meal is this receipt for?</div>
+  <div class="toggle-grid">
+    <button class="toggle-btn active-lunch" id="rcpt-meal-lunch" onclick="selectRcptMeal('lunch')">Lunch</button>
+    <button class="toggle-btn" id="rcpt-meal-dinner" onclick="selectRcptMeal('dinner')">Dinner</button>
+  </div>
+
+  <div class="section-label">Add a line item</div>
+  <input type="text" id="rcpt-name" placeholder="Item name (e.g. Pasta Napoli)">
+  <div style="display:grid;grid-template-columns:1fr auto;gap:0.6rem;align-items:center;margin-bottom:0.75rem;">
+    <input type="number" id="rcpt-amt" placeholder="Amount (FJD)" inputmode="decimal" step="0.01" min="0" style="margin-bottom:0;">
+    <button class="toggle-btn active-food" id="rcpt-cat-btn" onclick="toggleRcptCat()" style="padding:0.75rem 0.6rem;font-size:0.7rem;min-width:72px;">Food</button>
+  </div>
+  <button class="big-btn btn-ocean" onclick="addReceiptLine()">Add Line Item</button>
+
+  <div id="rcpt-lines-section" style="display:none;">
+    <div class="section-label">Lines on this receipt</div>
+    <div class="card" style="padding:0.25rem 1rem;">
+      <div id="rcpt-lines-list"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:0.75rem;">
+      <div class="stat-card" style="background:var(--palm-light);margin-bottom:0;padding:0.75rem 1rem;">
+        <div class="stat-label" style="color:var(--palm);">Food total</div>
+        <div style="font-size:1.2rem;font-weight:800;color:var(--palm);" id="rcpt-food-total">$0.00</div>
+      </div>
+      <div class="stat-card" style="background:var(--coral-light);margin-bottom:0;padding:0.75rem 1rem;">
+        <div class="stat-label" style="color:var(--coral);">Drinks total</div>
+        <div style="font-size:1.2rem;font-weight:800;color:var(--coral);" id="rcpt-drinks-total">$0.00</div>
+      </div>
+    </div>
+    <button class="big-btn btn-palm" onclick="addAllReceiptLines()">Add All to Today</button>
+    <button class="big-btn btn-outline" onclick="clearReceipt()">Clear Receipt</button>
+  </div>
+</div>
+
+<!-- HISTORY -->
+<div id="tab-history" class="tab-content">
+  <div class="section-label">Browse by day</div>
+  <div class="day-scroll" id="day-tabs"></div>
+  <div id="history-content"><div class="empty-state"><div class="empty-icon">📋</div>No entries yet!</div></div>
+
+  <div class="section-label" style="margin-top:1.5rem;">Export and sync</div>
+  <button class="big-btn btn-ocean" onclick="exportCSV()">Download CSV</button>
+  <button class="big-btn" style="background:#25a244;color:white;" onclick="syncGoogleSheets()">Sync to Google Sheets</button>
+  <div style="margin-top:0.5rem;padding:0.85rem 1rem;background:var(--sand);border-radius:12px;font-size:0.76rem;color:var(--muted);line-height:1.65;font-weight:500;">
+    Sync sends each new entry to your Google Form. Already synced entries are skipped so nothing gets doubled up. Use CSV as a backup anytime.
+  </div>
+
+  <div class="section-label" style="margin-top:1rem;">Danger zone</div>
+  <button class="big-btn btn-outline" style="border-color:var(--coral);color:var(--coral);" onclick="clearAllData()">Clear All Data</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const DAILY_BUDGET = 332;
+const FORM_ACTION  = 'https://docs.google.com/forms/d/e/1FAIpQLSf8f33iPM_Ch3YfnQX6vjQFMrtwRRBQSPDgmUtkXNOviQmgsQ/formResponse';
+const FORM_FIELDS  = { date:'entry.649952955', meal:'entry.5383481', category:'entry.1435432657', amount:'entry.1178928293', note:'entry.98621961' };
+
+let entries    = JSON.parse(localStorage.getItem('holiday_entries') || '[]');
+let selMeal    = 'lunch';
+let selCat     = 'food';
+let rcptMeal   = 'lunch';
+let rcptCat    = 'food';
+let rcptLines  = [];
+let selDay     = null;
+
+const todayStr = () => new Date().toISOString().split('T')[0];
+const fmtDate  = d  => new Date(d+'T12:00:00').toLocaleDateString('en-FJ',{weekday:'short',month:'short',day:'numeric'});
+const fmtAmt   = n  => '$'+Number(n).toFixed(2);
+const esc      = s  => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const save     = () => localStorage.setItem('holiday_entries', JSON.stringify(entries));
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2400);
+}
+
+function switchTab(name, btn) {
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  btn.classList.add('active');
+  if (name === 'today')   renderToday();
+  if (name === 'history') renderHistory();
+}
+
+function selectMeal(m) {
+  selMeal = m;
+  document.getElementById('meal-lunch').className  = 'toggle-btn'+(m==='lunch' ?' active-lunch' :'');
+  document.getElementById('meal-dinner').className = 'toggle-btn'+(m==='dinner'?' active-dinner':'');
+}
+function selectCat(c) {
+  selCat = c;
+  document.getElementById('cat-food').className   = 'toggle-btn'+(c==='food'  ?' active-food'  :'');
+  document.getElementById('cat-drinks').className = 'toggle-btn'+(c==='drinks'?' active-drinks':'');
+}
+function addEntry() {
+  const amt  = parseFloat(document.getElementById('amount-input').value);
+  if (!amt || amt <= 0) { showToast('Enter a valid amount first'); return; }
+  const note = document.getElementById('note-input').value.trim();
+  const date = document.getElementById('date-input').value || todayStr();
+  entries.push({ id: Date.now(), date, meal: selMeal, category: selCat, amount: amt, note });
+  save(); showToast('Entry added!'); clearForm(); renderToday();
+}
+function clearForm() {
+  document.getElementById('amount-input').value = '';
+  document.getElementById('note-input').value   = '';
+  document.getElementById('date-input').value   = todayStr();
+}
+
+function selectRcptMeal(m) {
+  rcptMeal = m;
+  document.getElementById('rcpt-meal-lunch').className  = 'toggle-btn'+(m==='lunch' ?' active-lunch' :'');
+  document.getElementById('rcpt-meal-dinner').className = 'toggle-btn'+(m==='dinner'?' active-dinner':'');
+}
+function toggleRcptCat() {
+  rcptCat = rcptCat === 'food' ? 'drinks' : 'food';
+  const btn = document.getElementById('rcpt-cat-btn');
+  btn.textContent = rcptCat === 'food' ? 'Food' : 'Drinks';
+  btn.className = 'toggle-btn '+(rcptCat==='food'?'active-food':'active-drinks');
+  btn.style.cssText = 'padding:0.75rem 0.6rem;font-size:0.7rem;min-width:72px;';
+}
+function addReceiptLine() {
+  const name = document.getElementById('rcpt-name').value.trim() || 'Item';
+  const amt  = parseFloat(document.getElementById('rcpt-amt').value);
+  if (!amt || amt <= 0) { showToast('Enter an amount for this line'); return; }
+  rcptLines.push({ id: Date.now()+Math.random(), name, amount: amt, category: rcptCat });
+  document.getElementById('rcpt-name').value = '';
+  document.getElementById('rcpt-amt').value  = '';
+  renderRcptLines();
+}
+function toggleLineCategory(id) {
+  const l = rcptLines.find(x => x.id === id);
+  if (l) l.category = l.category === 'food' ? 'drinks' : 'food';
+  renderRcptLines();
+}
+function removeRcptLine(id) {
+  rcptLines = rcptLines.filter(x => x.id !== id);
+  renderRcptLines();
+}
+function renderRcptLines() {
+  const sec = document.getElementById('rcpt-lines-section');
+  if (!rcptLines.length) { sec.style.display = 'none'; return; }
+  sec.style.display = 'block';
+  const fTotal = rcptLines.filter(l=>l.category==='food').reduce((s,l)=>s+l.amount,0);
+  const dTotal = rcptLines.filter(l=>l.category==='drinks').reduce((s,l)=>s+l.amount,0);
+  document.getElementById('rcpt-food-total').textContent   = fmtAmt(fTotal);
+  document.getElementById('rcpt-drinks-total').textContent = fmtAmt(dTotal);
+  document.getElementById('rcpt-lines-list').innerHTML = rcptLines.map(l=>`
+    <div class="rcpt-line">
+      <span class="rcpt-line-name">${esc(l.name)}</span>
+      <span class="rcpt-line-amt">${fmtAmt(l.amount)}</span>
+      <button class="line-cat-btn ${l.category==='food'?'is-food':'is-drinks'}" onclick="toggleLineCategory(${l.id})">${l.category==='food'?'Food':'Drinks'}</button>
+      <button class="delete-btn" onclick="removeRcptLine(${l.id})">&#x2715;</button>
+    </div>`).join('');
+}
+function addAllReceiptLines() {
+  if (!rcptLines.length) { showToast('No lines to add'); return; }
+  rcptLines.forEach(l => entries.push({ id: Date.now()+Math.random(), date: todayStr(), meal: rcptMeal, category: l.category, amount: l.amount, note: l.name }));
+  const n = rcptLines.length;
+  save(); showToast(n+' item'+(n===1?'':'s')+' added!'); clearReceipt(); renderToday();
+}
+function clearReceipt() {
+  rcptLines = [];
+  renderRcptLines();
+  document.getElementById('rcpt-name').value = '';
+  document.getElementById('rcpt-amt').value  = '';
+}
+
+function deleteEntry(id, fromHistory) {
+  if (!confirm('Remove this entry?')) return;
+  entries = entries.filter(e => e.id !== id);
+  save();
+  renderToday();
+  if (fromHistory) renderHistory();
+}
+
+function renderToday() {
+  const today  = todayStr();
+  const todayE = entries.filter(e=>e.date===today);
+  const food   = todayE.filter(e=>e.category==='food').reduce((s,e)=>s+e.amount,0);
+  const drinks = todayE.filter(e=>e.category==='drinks').reduce((s,e)=>s+e.amount,0);
+  const lunch  = todayE.filter(e=>e.category==='food'&&e.meal==='lunch').reduce((s,e)=>s+e.amount,0);
+  const dinner = todayE.filter(e=>e.category==='food'&&e.meal==='dinner').reduce((s,e)=>s+e.amount,0);
+  const rem    = DAILY_BUDGET - food;
+  const pct    = Math.max(0,Math.min(100,(rem/DAILY_BUDGET)*100));
+
+  document.getElementById('today-remaining').textContent   = fmtAmt(rem);
+  document.getElementById('header-remaining').textContent  = fmtAmt(rem);
+  document.getElementById('today-progress').style.width    = pct+'%';
+  document.getElementById('today-progress').style.background = pct<25?'#e8603c':pct<60?'#c97d18':'#1a6b45';
+  document.getElementById('today-spent-label').textContent = fmtAmt(food)+' spent of '+fmtAmt(DAILY_BUDGET);
+  document.getElementById('today-lunch').textContent       = fmtAmt(lunch);
+  document.getElementById('today-dinner').textContent      = fmtAmt(dinner);
+  document.getElementById('today-drinks').textContent      = fmtAmt(drinks);
+
+  const allDrinks = entries.filter(e=>e.category==='drinks').reduce((s,e)=>s+e.amount,0);
+  const days      = new Set(entries.map(e=>e.date)).size;
+  document.getElementById('trip-total-drinks').textContent = fmtAmt(allDrinks);
+  document.getElementById('trip-days-label').textContent   = 'Across '+days+' day'+(days===1?'':'s');
+
+  const list = document.getElementById('today-entries-list');
+  if (!todayE.length) { list.innerHTML='<div class="empty-state"><div class="empty-icon">🌴</div>No entries yet. Hit Add to get started!</div>'; return; }
+  list.innerHTML = [...todayE].reverse().map(e=>`
+    <div class="entry-item">
+      <div style="flex:1;">
+        <div style="display:flex;gap:0.4rem;align-items:center;margin-bottom:0.3rem;flex-wrap:wrap;">
+          <span class="pill pill-${e.meal}">${e.meal}</span>
+          <span class="pill pill-${e.category}">${e.category==='food'?'Food':'Drinks'}</span>
+        </div>
+        <div style="font-size:0.78rem;font-weight:500;color:var(--muted);">${esc(e.note||'No note')}</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:0.6rem;">
+        <div style="font-weight:800;font-size:1rem;">${fmtAmt(e.amount)}</div>
+        <button class="delete-btn" onclick="deleteEntry(${e.id})">&#x2715;</button>
+      </div>
+    </div>`).join('');
+}
+
+function renderHistory() {
+  const days = [...new Set(entries.map(e=>e.date))].sort().reverse();
+  const tabs = document.getElementById('day-tabs');
+  if (!days.length) { tabs.innerHTML=''; document.getElementById('history-content').innerHTML='<div class="empty-state"><div class="empty-icon">📋</div>No entries yet!</div>'; return; }
+  if (!selDay||!days.includes(selDay)) selDay = days[0];
+  tabs.innerHTML = days.map(d=>`<button class="day-pill ${d===selDay?'active':''}" onclick="selectDay('${d}')">${fmtDate(d)}</button>`).join('');
+  renderDayHistory(selDay);
+}
+function selectDay(d) { selDay=d; renderHistory(); }
+function renderDayHistory(date) {
+  const dayE   = entries.filter(e=>e.date===date);
+  const food   = dayE.filter(e=>e.category==='food').reduce((s,e)=>s+e.amount,0);
+  const drinks = dayE.filter(e=>e.category==='drinks').reduce((s,e)=>s+e.amount,0);
+  document.getElementById('history-content').innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:1rem;">
+      <div class="stat-card" style="background:var(--palm-light);margin-bottom:0;">
+        <div class="stat-label" style="color:var(--palm);">Budget left</div>
+        <div style="font-size:1.3rem;font-weight:800;color:var(--palm);">${fmtAmt(DAILY_BUDGET-food)}</div>
+      </div>
+      <div class="stat-card" style="background:var(--coral-light);margin-bottom:0;">
+        <div class="stat-label" style="color:var(--coral);">Drinks</div>
+        <div style="font-size:1.3rem;font-weight:800;color:var(--coral);">${fmtAmt(drinks)}</div>
+      </div>
+    </div>
+    <div class="card" style="padding:0 1.25rem;">
+      ${!dayE.length?'<div class="empty-state">No entries for this day</div>':
+        [...dayE].reverse().map(e=>`
+          <div class="entry-item">
+            <div style="flex:1;">
+              <div style="display:flex;gap:0.4rem;align-items:center;margin-bottom:0.3rem;flex-wrap:wrap;">
+                <span class="pill pill-${e.meal}">${e.meal}</span>
+                <span class="pill pill-${e.category}">${e.category==='food'?'Food':'Drinks'}</span>
+              </div>
+              <div style="font-size:0.78rem;font-weight:500;color:var(--muted);">${esc(e.note||'No note')}</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:0.6rem;">
+              <div style="font-weight:800;font-size:1rem;">${fmtAmt(e.amount)}</div>
+              <button class="delete-btn" onclick="deleteEntry(${e.id}, true)">&#x2715;</button>
+            </div>
+          </div>`).join('')}
+    </div>`;
+}
+
+function exportCSV() {
+  if (!entries.length) { showToast('No data to export yet'); return; }
+  const rows = entries.map(e=>`${e.date},${e.meal},${e.category},${e.amount.toFixed(2)},"${(e.note||'').replace(/"/g,'""')}"`).join('\n');
+  const a = Object.assign(document.createElement('a'),{ href: URL.createObjectURL(new Blob(['Date,Meal,Category,Amount (FJD),Note\n'+rows],{type:'text/csv'})), download:'holiday-meals-'+todayStr()+'.csv' });
+  a.click(); showToast('CSV downloaded!');
+}
+
+function syncGoogleSheets() {
+  const toSync = entries.filter(e=>!e.synced);
+  if (!toSync.length) { showToast('Nothing new to sync'); return; }
+  toSync.forEach(e => {
+    fetch(FORM_ACTION, { method:'POST', mode:'no-cors', body: new URLSearchParams({
+      [FORM_FIELDS.date]:     e.date,
+      [FORM_FIELDS.meal]:     e.meal.charAt(0).toUpperCase()+e.meal.slice(1),
+      [FORM_FIELDS.category]: e.category.charAt(0).toUpperCase()+e.category.slice(1),
+      [FORM_FIELDS.amount]:   e.amount.toFixed(2),
+      [FORM_FIELDS.note]:     e.note||''
+    })});
+    e.synced = true;
+  });
+  save();
+  showToast(toSync.length+' entr'+(toSync.length===1?'y':'ies')+' sent to Sheets!');
+}
+
+function clearAllData() {
+  if (!confirm('Are you sure you want to delete everything?')) return;
+  if (!confirm('This will wipe all entries for the whole trip. No undoing this. Really delete?')) return;
+  entries=[]; save(); renderToday(); renderHistory(); showToast('All data cleared');
+}
+
+// Init
+document.getElementById('date-input').value = todayStr();
+document.getElementById('header-date').textContent = new Date().toLocaleDateString('en-FJ',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+renderToday();
+</script>
+</body>
+</html>
