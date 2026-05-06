@@ -163,6 +163,10 @@
   <div class="stat-card" style="background:var(--gold-light);">
     <div class="stat-label" style="color:var(--gold);">Total Drinks and Coffees</div>
     <div class="stat-value" style="color:var(--gold);" id="trip-total-drinks">$0.00</div>
+    <div style="display:flex;align-items:baseline;gap:0.5rem;margin-top:0.3rem;flex-wrap:wrap;">
+      <div style="font-size:1.1rem;font-weight:800;color:var(--ocean);" id="trip-total-aud">~A$0.00</div>
+      <div style="font-size:0.68rem;font-weight:600;color:var(--muted);" id="trip-rate-label">Loading rate...</div>
+    </div>
     <div class="stat-sub" style="color:var(--gold);" id="trip-days-label">Across 0 days</div>
   </div>
 
@@ -519,6 +523,7 @@ function renderToday(){
   const days=new Set(entries.map(e=>e.date)).size;
   document.getElementById('trip-total-drinks').textContent=fmtAmt(allDrinks);
   document.getElementById('trip-days-label').textContent='Across '+days+' day'+(days===1?'':'s');
+  updateAUD(allDrinks);
 
   const list=document.getElementById('today-entries-list');
   if(!todayE.length){list.innerHTML='<div class="empty-state"><div class="empty-icon">🌴</div>No entries yet. Add a receipt to get started!</div>';return;}
@@ -819,10 +824,42 @@ function clearAllData(){
   entries=[];save();renderToday();renderHistory();showToast('All data cleared');
 }
 
+// ── FX RATE ───────────────────────────────────────────
+let fjdToAud = 0.6321; // XE mid-market fallback rate (May 2026)
+let rateLoaded = false;
+
+async function fetchFXRate(){
+  try {
+    // frankfurter.app is a free, open-source ECB-backed rates API
+    const res = await fetch('https://api.frankfurter.app/latest?from=FJD&to=AUD');
+    if(!res.ok) throw new Error('non-200');
+    const data = await res.json();
+    if(data.rates && data.rates.AUD){
+      fjdToAud = data.rates.AUD;
+      rateLoaded = true;
+      const dateStr = data.date || 'today';
+      document.getElementById('trip-rate-label').textContent =
+        '1 FJD = A$'+fjdToAud.toFixed(4)+' (ECB '+dateStr+')';
+      // Re-render today to pick up live rate
+      renderToday();
+    }
+  } catch(e) {
+    document.getElementById('trip-rate-label').textContent =
+      '1 FJD ≈ A$'+fjdToAud.toFixed(4)+' (XE fallback, May 2026)';
+  }
+}
+
+function updateAUD(fjdAmount){
+  const aud = fjdAmount * fjdToAud;
+  document.getElementById('trip-total-aud').textContent =
+    '~A$' + aud.toFixed(2);
+}
+
 // ── INIT ──────────────────────────────────────────────
 document.getElementById('header-date').textContent=new Date().toLocaleDateString('en-FJ',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
 document.getElementById('rcpt-date').value=todayStr();
 renderToday();
+fetchFXRate();
 </script>
 </body>
 </html>
