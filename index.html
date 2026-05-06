@@ -39,6 +39,7 @@
   .btn-palm{background:var(--palm);color:white;}
   .btn-ocean{background:var(--ocean);color:white;}
   .btn-gold{background:var(--gold);color:white;}
+  .btn-coral{background:var(--coral);color:white;}
   .btn-outline{background:transparent;border:2px solid var(--border);color:var(--text);}
   .toggle-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.6rem;margin-bottom:1rem;}
   .toggle-btn{padding:0.9rem 0.5rem;border-radius:12px;border:2px solid var(--border);font-family:'Montserrat',sans-serif;font-size:0.78rem;font-weight:700;cursor:pointer;transition:all 0.15s;background:var(--surface);color:var(--muted);text-align:center;}
@@ -46,6 +47,9 @@
   .toggle-btn.active-dinner{border-color:var(--palm);background:var(--palm-light);color:var(--palm);}
   .toggle-btn.active-food{border-color:var(--palm);background:var(--palm-light);color:var(--palm);}
   .toggle-btn.active-drinks{border-color:var(--coral);background:var(--coral-light);color:var(--coral);}
+  .toggle-btn.active-standalone-drinks{border-color:var(--coral);background:var(--coral);color:white;}
+  .toggle-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.6rem;margin-bottom:1rem;}
+  .edit-line-highlight{background:var(--gold-light)!important;border-color:var(--gold)!important;}
   input[type="number"],input[type="text"],input[type="date"],input[type="url"]{width:100%;padding:0.85rem 1rem;border-radius:12px;border:1.5px solid var(--border);font-family:'Montserrat',sans-serif;font-size:0.95rem;font-weight:500;background:var(--bg);color:var(--text);outline:none;transition:border-color 0.15s;margin-bottom:0.75rem;}
   input:focus{border-color:var(--palm);}
   .entry-item{display:flex;justify-content:space-between;align-items:flex-start;padding:0.9rem 0;border-bottom:1px solid var(--border);}
@@ -183,19 +187,29 @@
   <div class="section-label">Date</div>
   <input type="date" id="rcpt-date">
 
-  <div class="section-label">Which meal?</div>
-  <div class="toggle-grid">
-    <button class="toggle-btn active-lunch" id="rcpt-meal-lunch" onclick="selectRcptMeal('lunch')">Lunch</button>
-    <button class="toggle-btn" id="rcpt-meal-dinner" onclick="selectRcptMeal('dinner')">Dinner</button>
+  <div class="section-label">Meal and category</div>
+  <div class="toggle-grid-3">
+    <button class="toggle-btn active-lunch" id="rcpt-meal-lunch" onclick="selectRcptMeal('lunch')">🍽 Lunch</button>
+    <button class="toggle-btn" id="rcpt-meal-dinner" onclick="selectRcptMeal('dinner')">🌙 Dinner</button>
+    <button class="toggle-btn" id="rcpt-meal-drinks" onclick="selectRcptMeal('standalonedrinks')">☕ Drinks Only</button>
   </div>
 
-  <div class="section-label">Add a line item</div>
-  <input type="text" id="rcpt-name" placeholder="Item name (e.g. Pasta Napoli)">
-  <div style="display:grid;grid-template-columns:1fr auto;gap:0.6rem;align-items:center;margin-bottom:0.75rem;">
-    <input type="number" id="rcpt-amt" placeholder="Amount (FJD)" inputmode="decimal" step="0.01" min="0" style="margin-bottom:0;">
-    <button class="toggle-btn active-food" id="rcpt-cat-btn" onclick="toggleRcptCat()" style="padding:0.75rem 0.6rem;font-size:0.7rem;min-width:72px;">Food</button>
+  <div id="rcpt-cat-section">
+    <div class="section-label">Budget</div>
+    <div class="toggle-grid">
+      <button class="toggle-btn active-food" id="rcpt-cat-food" onclick="selectRcptCat('food')">Food</button>
+      <button class="toggle-btn" id="rcpt-cat-drinks" onclick="selectRcptCat('drinks')">Drink / Coffee</button>
+    </div>
   </div>
-  <button class="big-btn btn-ocean" onclick="addReceiptLine()">Add Line</button>
+
+  <div class="section-label">Item name</div>
+  <input type="text" id="rcpt-name" placeholder="e.g. Flat white, Pasta Napoli">
+  <div class="section-label">Amount (FJD)</div>
+  <input type="number" id="rcpt-amt" placeholder="0.00" inputmode="decimal" step="0.01" min="0">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.6rem;">
+    <button class="big-btn btn-ocean" id="rcpt-add-btn" onclick="addReceiptLine()" style="margin-bottom:0.75rem;">Add Line</button>
+    <button class="big-btn btn-outline" id="rcpt-cancel-edit-btn" onclick="cancelEdit()" style="display:none;margin-bottom:0.75rem;">Cancel Edit</button>
+  </div>
 
   <!-- Lines accumulate here -->
   <div id="rcpt-lines-section" style="display:none;">
@@ -220,13 +234,13 @@
   <div class="drive-hint">
     <strong>How to attach:</strong> Open your <a href="https://drive.google.com/drive/folders/1zJLfRJgatrNpT98NykilIFPjmFd0KXKt" target="_blank" style="color:var(--ocean);font-weight:800;">Drive folder</a>, upload the photo, right-click it, choose "Get link", set to "Anyone with link", then paste below.
   </div>
-  <input type="url" id="rcpt-photo-url" placeholder="https://drive.google.com/file/d/...">
   <button class="big-btn btn-outline" style="border-color:var(--ocean);color:var(--ocean);" onclick="window.open('https://drive.google.com/drive/folders/1zJLfRJgatrNpT98NykilIFPjmFd0KXKt','_blank')">
     Open Drive Folder
   </button>
+  <input type="url" id="rcpt-photo-url" placeholder="https://drive.google.com/file/d/...">
 
   <button class="big-btn btn-palm" onclick="addAllReceiptLines()">Save Receipt</button>
-  <button class="big-btn btn-outline" onclick="clearReceipt()">Clear Receipt</button>
+  <button class="big-btn btn-coral" onclick="clearReceipt()">Clear Receipt</button>
 
 </div>
 
@@ -336,51 +350,117 @@ function switchTab(name,btn){
 }
 
 // ── RECEIPT ──────────────────────────────────────────
+let editingLineId = null;
+
 function selectRcptMeal(m){
-  rcptMeal=m;
-  document.getElementById('rcpt-meal-lunch').className ='toggle-btn'+(m==='lunch' ?' active-lunch' :'');
-  document.getElementById('rcpt-meal-dinner').className='toggle-btn'+(m==='dinner'?' active-dinner':'');
+  rcptMeal = m;
+  const isStandalone = m === 'standalonedrinks';
+  document.getElementById('rcpt-meal-lunch').className   = 'toggle-btn'+(m==='lunch'            ?' active-lunch':'');
+  document.getElementById('rcpt-meal-dinner').className  = 'toggle-btn'+(m==='dinner'           ?' active-dinner':'');
+  document.getElementById('rcpt-meal-drinks').className  = 'toggle-btn'+(isStandalone?' active-standalone-drinks':'');
+  // Hide cat toggle for standalone drinks — force category to drinks
+  document.getElementById('rcpt-cat-section').style.display = isStandalone ? 'none' : 'block';
+  if(isStandalone){
+    rcptCat = 'drinks';
+  } else {
+    // restore last explicit cat selection when switching back
+    selectRcptCat(rcptCat === 'drinks' && m !== 'standalonedrinks' ? rcptCat : rcptCat);
+  }
 }
-function toggleRcptCat(){
-  rcptCat=rcptCat==='food'?'drinks':'food';
-  const btn=document.getElementById('rcpt-cat-btn');
-  btn.textContent=rcptCat==='food'?'Food':'Drinks';
-  btn.className='toggle-btn '+(rcptCat==='food'?'active-food':'active-drinks');
-  btn.style.cssText='padding:0.75rem 0.6rem;font-size:0.7rem;min-width:72px;';
+
+function selectRcptCat(c){
+  rcptCat = c;
+  document.getElementById('rcpt-cat-food').className   = 'toggle-btn'+(c==='food'  ?' active-food'  :'');
+  document.getElementById('rcpt-cat-drinks').className = 'toggle-btn'+(c==='drinks'?' active-drinks':'');
 }
+
 function addReceiptLine(){
-  const name=document.getElementById('rcpt-name').value.trim()||'Item';
-  const amt=parseFloat(document.getElementById('rcpt-amt').value);
+  const name = document.getElementById('rcpt-name').value.trim() || 'Item';
+  const amt  = parseFloat(document.getElementById('rcpt-amt').value);
   if(!amt||amt<=0){showToast('Enter an amount for this line');return;}
-  rcptLines.push({id:Date.now()+Math.random(),name,amount:amt,category:rcptCat});
-  document.getElementById('rcpt-name').value='';
-  document.getElementById('rcpt-amt').value='';
+  // Standalone drinks: meal stored as 'drinks', category 'drinks'
+  const meal     = rcptMeal === 'standalonedrinks' ? 'drinks' : rcptMeal;
+  const category = rcptMeal === 'standalonedrinks' ? 'drinks' : rcptCat;
+
+  if(editingLineId !== null){
+    // Update existing line
+    const l = rcptLines.find(x=>x.id===editingLineId);
+    if(l){ l.name=name; l.amount=amt; l.meal=meal; l.category=category; }
+    editingLineId = null;
+    document.getElementById('rcpt-add-btn').textContent = 'Add Line';
+    document.getElementById('rcpt-cancel-edit-btn').style.display = 'none';
+  } else {
+    rcptLines.push({id:Date.now()+Math.random(), name, amount:amt, meal, category});
+  }
+  document.getElementById('rcpt-name').value = '';
+  document.getElementById('rcpt-amt').value  = '';
   renderRcptLines();
 }
-function toggleLineCategory(id){
-  const l=rcptLines.find(x=>x.id===id);
-  if(l) l.category=l.category==='food'?'drinks':'food';
-  renderRcptLines();
+
+function editLine(id){
+  const l = rcptLines.find(x=>x.id===id);
+  if(!l) return;
+  editingLineId = id;
+  document.getElementById('rcpt-name').value = l.name;
+  document.getElementById('rcpt-amt').value  = l.amount;
+  // Restore meal + cat UI
+  if(l.meal === 'drinks'){
+    selectRcptMeal('standalonedrinks');
+  } else {
+    selectRcptMeal(l.meal);
+    selectRcptCat(l.category);
+  }
+  document.getElementById('rcpt-add-btn').textContent = 'Update Line';
+  document.getElementById('rcpt-cancel-edit-btn').style.display = 'flex';
+  // Scroll to top of receipt tab
+  document.getElementById('tab-receipt').scrollTop = 0;
+  window.scrollTo({top: document.getElementById('tab-receipt').offsetTop - 60, behavior:'smooth'});
+  showToast('Edit the line above then tap Update');
 }
+
+function cancelEdit(){
+  editingLineId = null;
+  document.getElementById('rcpt-name').value = '';
+  document.getElementById('rcpt-amt').value  = '';
+  document.getElementById('rcpt-add-btn').textContent = 'Add Line';
+  document.getElementById('rcpt-cancel-edit-btn').style.display = 'none';
+}
+
 function removeRcptLine(id){
-  rcptLines=rcptLines.filter(x=>x.id!==id);
+  rcptLines = rcptLines.filter(x=>x.id!==id);
+  if(editingLineId===id) cancelEdit();
   renderRcptLines();
 }
+
 function renderRcptLines(){
-  const sec=document.getElementById('rcpt-lines-section');
+  const sec = document.getElementById('rcpt-lines-section');
   if(!rcptLines.length){sec.style.display='none';return;}
-  sec.style.display='block';
-  const fTotal=rcptLines.filter(l=>l.category==='food').reduce((s,l)=>s+l.amount,0);
-  const dTotal=rcptLines.filter(l=>l.category==='drinks').reduce((s,l)=>s+l.amount,0);
-  document.getElementById('rcpt-food-total').textContent=fmtAmt(fTotal);
-  document.getElementById('rcpt-drinks-total').textContent=fmtAmt(dTotal);
-  document.getElementById('rcpt-lines-list').innerHTML=rcptLines.map(l=>`
-    <div class="rcpt-line">
-      <span class="rcpt-line-name">${esc(l.name)}</span>
-      <span class="rcpt-line-amt">${fmtAmt(l.amount)}</span>
-      <button class="line-cat-btn ${l.category==='food'?'is-food':'is-drinks'}" onclick="toggleLineCategory(${l.id})">${l.category==='food'?'Food':'Drinks'}</button>
-      <button class="delete-btn" onclick="removeRcptLine(${l.id})">&#x2715;</button>
-    </div>`).join('');
+  sec.style.display = 'block';
+  const fTotal = rcptLines.filter(l=>l.category==='food').reduce((s,l)=>s+l.amount,0);
+  const dTotal = rcptLines.filter(l=>l.category==='drinks').reduce((s,l)=>s+l.amount,0);
+  document.getElementById('rcpt-food-total').textContent   = fmtAmt(fTotal);
+  document.getElementById('rcpt-drinks-total').textContent = fmtAmt(dTotal);
+  document.getElementById('rcpt-lines-list').innerHTML = rcptLines.map(l=>{
+    const mealLabel = l.meal==='drinks'?'Drinks':l.meal==='lunch'?'Lunch':'Dinner';
+    const mealColor = l.meal==='lunch'?'var(--ocean)':l.meal==='dinner'?'var(--palm)':'var(--coral)';
+    const catLabel  = l.category==='food'?'Food':'Drinks';
+    const isEditing = editingLineId===l.id;
+    return `
+    <div class="rcpt-line${isEditing?' edit-line-highlight':''}">
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:0.8rem;font-weight:700;color:var(--text);margin-bottom:0.2rem;">${esc(l.name)}</div>
+        <div style="display:flex;gap:0.35rem;flex-wrap:wrap;">
+          <span style="font-size:0.6rem;font-weight:800;padding:0.15rem 0.45rem;border-radius:99px;background:${mealColor}20;color:${mealColor};">${mealLabel}</span>
+          <span class="line-cat-btn ${l.category==='food'?'is-food':'is-drinks'}">${catLabel}</span>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:0.4rem;flex-shrink:0;">
+        <span class="rcpt-line-amt">${fmtAmt(l.amount)}</span>
+        <button onclick="editLine(${l.id})" style="background:var(--ocean-light);border:none;border-radius:8px;padding:0.3rem 0.5rem;font-size:0.7rem;font-weight:800;color:var(--ocean);cursor:pointer;">Edit</button>
+        <button class="delete-btn" onclick="removeRcptLine(${l.id})">&#x2715;</button>
+      </div>
+    </div>`;
+  }).join('');
 }
 function addAllReceiptLines(){
   if(!rcptLines.length){showToast('Add at least one line first');return;}
@@ -388,20 +468,24 @@ function addAllReceiptLines(){
   const photoUrl=document.getElementById('rcpt-photo-url').value.trim();
   const date=document.getElementById('rcpt-date').value||todayStr();
   rcptLines.forEach(l=>{
-    entries.push({id:Date.now()+Math.random(),date,meal:rcptMeal,category:l.category,amount:l.amount,note:l.name,restaurant:restaurant||'',photoUrl:photoUrl||''});
+    entries.push({id:Date.now()+Math.random(),date,meal:l.meal||rcptMeal,category:l.category,amount:l.amount,note:l.name,restaurant:restaurant||'',photoUrl:photoUrl||''});
   });
   const n=rcptLines.length;
   save(); showToast(n+' item'+(n===1?'':'s')+' saved!'); clearReceipt(); renderToday();
 }
 function clearReceipt(){
   rcptLines=[];
+  editingLineId=null;
   renderRcptLines();
   document.getElementById('rcpt-restaurant').value='';
   document.getElementById('rcpt-date').value=todayStr();
   document.getElementById('rcpt-name').value='';
   document.getElementById('rcpt-amt').value='';
   document.getElementById('rcpt-photo-url').value='';
+  document.getElementById('rcpt-add-btn').textContent='Add Line';
+  document.getElementById('rcpt-cancel-edit-btn').style.display='none';
   selectRcptMeal('lunch');
+  selectRcptCat('food');
 }
 
 // ── DELETE ────────────────────────────────────────────
