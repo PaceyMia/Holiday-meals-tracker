@@ -180,6 +180,9 @@
   <div class="section-label">Restaurant name</div>
   <input type="text" id="rcpt-restaurant" placeholder="e.g. Kula Wild Adventure Park">
 
+  <div class="section-label">Date</div>
+  <input type="date" id="rcpt-date">
+
   <div class="section-label">Which meal?</div>
   <div class="toggle-grid">
     <button class="toggle-btn active-lunch" id="rcpt-meal-lunch" onclick="selectRcptMeal('lunch')">Lunch</button>
@@ -222,7 +225,7 @@
     Open Drive Folder
   </button>
 
-  <button class="big-btn btn-palm" onclick="addAllReceiptLines()">Save Receipt to Today</button>
+  <button class="big-btn btn-palm" onclick="addAllReceiptLines()">Save Receipt</button>
   <button class="big-btn btn-outline" onclick="clearReceipt()">Clear Receipt</button>
 
 </div>
@@ -383,7 +386,7 @@ function addAllReceiptLines(){
   if(!rcptLines.length){showToast('Add at least one line first');return;}
   const restaurant=document.getElementById('rcpt-restaurant').value.trim();
   const photoUrl=document.getElementById('rcpt-photo-url').value.trim();
-  const date=todayStr();
+  const date=document.getElementById('rcpt-date').value||todayStr();
   rcptLines.forEach(l=>{
     entries.push({id:Date.now()+Math.random(),date,meal:rcptMeal,category:l.category,amount:l.amount,note:l.name,restaurant:restaurant||'',photoUrl:photoUrl||''});
   });
@@ -394,6 +397,7 @@ function clearReceipt(){
   rcptLines=[];
   renderRcptLines();
   document.getElementById('rcpt-restaurant').value='';
+  document.getElementById('rcpt-date').value=todayStr();
   document.getElementById('rcpt-name').value='';
   document.getElementById('rcpt-amt').value='';
   document.getElementById('rcpt-photo-url').value='';
@@ -733,6 +737,7 @@ function clearAllData(){
 
 // ── INIT ──────────────────────────────────────────────
 document.getElementById('header-date').textContent=new Date().toLocaleDateString('en-FJ',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+document.getElementById('rcpt-date').value=todayStr();
 renderToday();
 </script>
 </body>
