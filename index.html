@@ -16,6 +16,7 @@
     --text:#1c1c1e; --muted:#6b7280;
     --surface:#ffffff; --bg:#faf8f5;
     --border:rgba(0,0,0,0.08);
+    --slate:#5b4fcf; --slate-light:#eeecfb;
   }
   *{-webkit-tap-highlight-color:transparent;box-sizing:border-box;}
   body{font-family:'Montserrat',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;margin:0;padding:0;}
@@ -60,6 +61,9 @@
   .pill-lunch{background:var(--ocean-light);color:var(--ocean);}
   .pill-dinner{background:var(--palm-light);color:var(--palm);}
   .pill-synced{background:#e8f5ef;color:#1a6b45;}
+  .pill-room{background:var(--slate-light);color:var(--slate);}
+  .toggle-btn.active-room{border-color:var(--slate);background:var(--slate);color:white;}
+  .line-cat-btn.is-room{background:var(--slate-light);color:var(--slate);border-color:var(--slate);}
   .pill-unsynced{background:#fdf3e0;color:#c97d18;}
   .delete-btn{background:none;border:none;color:var(--muted);cursor:pointer;font-size:1rem;padding:0.25rem;line-height:1;opacity:0.4;transition:opacity 0.15s;flex-shrink:0;}
   .delete-btn:hover{opacity:1;color:var(--coral);}
@@ -159,6 +163,12 @@
     <div class="stat-sub" style="color:var(--coral);">Out of pocket</div>
   </div>
 
+  <div class="stat-card" style="background:var(--slate-light);">
+    <div class="stat-label" style="color:var(--slate);">Room Charges Today</div>
+    <div class="stat-value" style="color:var(--slate);" id="today-room">$0.00</div>
+    <div class="stat-sub" style="color:var(--slate);">Charged to room</div>
+  </div>
+
   <div class="section-label">Whole trip extra bill</div>
   <div class="stat-card" style="background:var(--gold-light);">
     <div class="stat-label" style="color:var(--gold);">Total Drinks and Coffees</div>
@@ -168,6 +178,28 @@
       <div style="font-size:0.68rem;font-weight:600;color:var(--muted);" id="trip-rate-label">Loading rate...</div>
     </div>
     <div class="stat-sub" style="color:var(--gold);" id="trip-days-label">Across 0 days</div>
+  </div>
+
+  <div class="stat-card" style="background:var(--slate-light);">
+    <div class="stat-label" style="color:var(--slate);">Total Room Charges (Trip)</div>
+    <div style="display:flex;align-items:baseline;gap:0.35rem;"><div class="stat-value" style="color:var(--slate);" id="trip-total-room">$0.00</div><span style="font-size:0.72rem;font-weight:800;color:var(--slate);opacity:0.7;">FJD</span></div>
+    <div style="display:flex;align-items:baseline;gap:0.5rem;margin-top:0.3rem;">
+      <div style="font-size:1.1rem;font-weight:800;color:var(--ocean);" id="trip-room-aud">~A$0.00</div>
+    </div>
+    <div class="stat-sub" style="color:var(--slate);">Settle at checkout</div>
+  </div>
+
+  <div class="section-label">Checkout total</div>
+  <div class="stat-card" style="background:linear-gradient(135deg,#1c1c2e 0%,#2d1f4e 100%);border:2px solid var(--slate);">
+    <div class="stat-label" style="color:rgba(255,255,255,0.6);">Total to Pay at Checkout</div>
+    <div style="display:flex;align-items:baseline;gap:0.4rem;">
+      <div class="stat-value" style="color:white;" id="checkout-total-fjd">$0.00</div>
+      <span style="font-size:0.78rem;font-weight:800;color:rgba(255,255,255,0.5);">FJD</span>
+    </div>
+    <div style="display:flex;align-items:baseline;gap:0.4rem;margin-top:0.4rem;">
+      <div style="font-size:1.3rem;font-weight:800;color:#a78bfa;" id="checkout-total-aud">~A$0.00</div>
+    </div>
+    <div style="font-size:0.72rem;font-weight:600;color:rgba(255,255,255,0.5);margin-top:0.4rem;">Drinks and coffees + room charges</div>
   </div>
 
   <div class="section-label">Sync</div>
@@ -185,17 +217,20 @@
 <!-- ════════════════ ADD RECEIPT ════════════════ -->
 <div id="tab-receipt" class="tab-content">
 
-  <div class="section-label">Restaurant name</div>
+  <div class="section-label">Restaurant / Shop Name</div>
   <input type="text" id="rcpt-restaurant" placeholder="e.g. Kula Wild Adventure Park">
 
   <div class="section-label">Date</div>
   <input type="date" id="rcpt-date">
 
   <div class="section-label">Meal and category</div>
-  <div class="toggle-grid-3">
+  <div class="toggle-grid" style="grid-template-columns:1fr 1fr;gap:0.6rem;margin-bottom:0.6rem;">
     <button class="toggle-btn active-lunch" id="rcpt-meal-lunch" onclick="selectRcptMeal('lunch')">🍽 Lunch</button>
     <button class="toggle-btn" id="rcpt-meal-dinner" onclick="selectRcptMeal('dinner')">🌙 Dinner</button>
+  </div>
+  <div class="toggle-grid" style="grid-template-columns:1fr 1fr;gap:0.6rem;margin-bottom:1rem;">
     <button class="toggle-btn" id="rcpt-meal-drinks" onclick="selectRcptMeal('standalonedrinks')">☕ Drinks Only</button>
+    <button class="toggle-btn" id="rcpt-meal-room" onclick="selectRcptMeal('roomcharge')">🛍 Room Charge</button>
   </div>
 
   <div id="rcpt-cat-section">
@@ -230,6 +265,10 @@
         <div class="stat-label" style="color:var(--coral);">Drinks total</div>
         <div style="font-size:1.2rem;font-weight:800;color:var(--coral);" id="rcpt-drinks-total">$0.00</div>
       </div>
+      <div class="stat-card" style="background:var(--slate-light);margin-bottom:0;padding:0.75rem 1rem;grid-column:span 2;">
+        <div class="stat-label" style="color:var(--slate);">Room Charges total</div>
+        <div style="font-size:1.2rem;font-weight:800;color:var(--slate);" id="rcpt-room-total">$0.00</div>
+      </div>
     </div>
   </div>
 
@@ -258,6 +297,7 @@
     <div class="summary-tile"><div class="summary-tile-label">Total food spend</div><div class="summary-tile-val" id="cs-food" style="color:var(--palm);">$0</div></div>
     <div class="summary-tile"><div class="summary-tile-label">Total drinks</div><div class="summary-tile-val" id="cs-drinks" style="color:var(--coral);">$0</div></div>
     <div class="summary-tile"><div class="summary-tile-label">Avg food / day</div><div class="summary-tile-val" id="cs-avg" style="color:var(--ocean);">$0</div></div>
+    <div class="summary-tile" style="grid-column:span 2;"><div class="summary-tile-label">Total room charges (checkout)</div><div class="summary-tile-val" id="cs-room" style="color:var(--slate);">$0</div></div>
   </div>
 
   <!-- Daily spend bar chart -->
@@ -275,6 +315,7 @@
     <div class="legend-row">
       <div class="legend-item"><span class="legend-dot" style="background:#1a6b45;"></span>Food</div>
       <div class="legend-item"><span class="legend-dot" style="background:#e8603c;"></span>Drinks</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#5b4fcf;"></span>Room Charges</div>
       <div class="legend-item"><span class="legend-dot" style="background:rgba(0,0,0,0.15);"></span>Budget line</div>
     </div>
   </div>
@@ -357,17 +398,16 @@ let editingLineId = null;
 function selectRcptMeal(m){
   rcptMeal = m;
   const isStandalone = m === 'standalonedrinks';
-  document.getElementById('rcpt-meal-lunch').className   = 'toggle-btn'+(m==='lunch'            ?' active-lunch':'');
-  document.getElementById('rcpt-meal-dinner').className  = 'toggle-btn'+(m==='dinner'           ?' active-dinner':'');
-  document.getElementById('rcpt-meal-drinks').className  = 'toggle-btn'+(isStandalone?' active-standalone-drinks':'');
-  // Hide cat toggle for standalone drinks — force category to drinks
-  document.getElementById('rcpt-cat-section').style.display = isStandalone ? 'none' : 'block';
-  if(isStandalone){
-    rcptCat = 'drinks';
-  } else {
-    // restore last explicit cat selection when switching back
-    selectRcptCat(rcptCat === 'drinks' && m !== 'standalonedrinks' ? rcptCat : rcptCat);
-  }
+  const isRoomCharge = m === 'roomcharge';
+  const hidecat      = isStandalone || isRoomCharge;
+  document.getElementById('rcpt-meal-lunch').className  = 'toggle-btn'+(m==='lunch'      ?' active-lunch':'');
+  document.getElementById('rcpt-meal-dinner').className = 'toggle-btn'+(m==='dinner'     ?' active-dinner':'');
+  document.getElementById('rcpt-meal-drinks').className = 'toggle-btn'+(isStandalone     ?' active-standalone-drinks':'');
+  document.getElementById('rcpt-meal-room').className   = 'toggle-btn'+(isRoomCharge     ?' active-room':'');
+  document.getElementById('rcpt-cat-section').style.display = hidecat ? 'none' : 'block';
+  if(isStandalone)      rcptCat = 'drinks';
+  else if(isRoomCharge) rcptCat = 'room';
+  else                  selectRcptCat(rcptCat);
 }
 
 function selectRcptCat(c){
@@ -380,9 +420,8 @@ function addReceiptLine(){
   const name = document.getElementById('rcpt-name').value.trim() || 'Item';
   const amt  = parseFloat(document.getElementById('rcpt-amt').value);
   if(!amt||amt<=0){showToast('Enter an amount for this line');return;}
-  // Standalone drinks: meal stored as 'drinks', category 'drinks'
-  const meal     = rcptMeal === 'standalonedrinks' ? 'drinks' : rcptMeal;
-  const category = rcptMeal === 'standalonedrinks' ? 'drinks' : rcptCat;
+  const meal     = rcptMeal === 'standalonedrinks' ? 'drinks' : rcptMeal === 'roomcharge' ? 'room' : rcptMeal;
+  const category = rcptMeal === 'standalonedrinks' ? 'drinks' : rcptMeal === 'roomcharge' ? 'room' : rcptCat;
 
   if(editingLineId !== null){
     // Update existing line
@@ -406,12 +445,9 @@ function editLine(id){
   document.getElementById('rcpt-name').value = l.name;
   document.getElementById('rcpt-amt').value  = l.amount;
   // Restore meal + cat UI
-  if(l.meal === 'drinks'){
-    selectRcptMeal('standalonedrinks');
-  } else {
-    selectRcptMeal(l.meal);
-    selectRcptCat(l.category);
-  }
+  if(l.meal === 'drinks')     selectRcptMeal('standalonedrinks');
+  else if(l.meal === 'room')  selectRcptMeal('roomcharge');
+  else { selectRcptMeal(l.meal); selectRcptCat(l.category); }
   document.getElementById('rcpt-add-btn').textContent = 'Update Line';
   document.getElementById('rcpt-cancel-edit-btn').style.display = 'flex';
   // Scroll to top of receipt tab
@@ -440,12 +476,14 @@ function renderRcptLines(){
   sec.style.display = 'block';
   const fTotal = rcptLines.filter(l=>l.category==='food').reduce((s,l)=>s+l.amount,0);
   const dTotal = rcptLines.filter(l=>l.category==='drinks').reduce((s,l)=>s+l.amount,0);
+  const rTotal = rcptLines.filter(l=>l.category==='room').reduce((s,l)=>s+l.amount,0);
   document.getElementById('rcpt-food-total').textContent   = fmtAmt(fTotal);
   document.getElementById('rcpt-drinks-total').textContent = fmtAmt(dTotal);
+  document.getElementById('rcpt-room-total').textContent   = fmtAmt(rTotal);
   document.getElementById('rcpt-lines-list').innerHTML = rcptLines.map(l=>{
-    const mealLabel = l.meal==='drinks'?'Drinks':l.meal==='lunch'?'Lunch':'Dinner';
-    const mealColor = l.meal==='lunch'?'var(--ocean)':l.meal==='dinner'?'var(--palm)':'var(--coral)';
-    const catLabel  = l.category==='food'?'Food':'Drinks';
+    const mealLabel = l.meal==='drinks'?'Drinks':l.meal==='room'?'Room':l.meal==='lunch'?'Lunch':'Dinner';
+    const mealColor = l.meal==='lunch'?'var(--ocean)':l.meal==='dinner'?'var(--palm)':l.meal==='room'?'var(--slate)':'var(--coral)';
+    const catLabel  = l.category==='food'?'Food':l.category==='room'?'Room Charge':'Drinks';
     const isEditing = editingLineId===l.id;
     return `
     <div class="rcpt-line${isEditing?' edit-line-highlight':''}">
@@ -453,7 +491,7 @@ function renderRcptLines(){
         <div style="font-size:0.8rem;font-weight:700;color:var(--text);margin-bottom:0.2rem;">${esc(l.name)}</div>
         <div style="display:flex;gap:0.35rem;flex-wrap:wrap;">
           <span style="font-size:0.6rem;font-weight:800;padding:0.15rem 0.45rem;border-radius:99px;background:${mealColor}20;color:${mealColor};">${mealLabel}</span>
-          <span class="line-cat-btn ${l.category==='food'?'is-food':'is-drinks'}">${catLabel}</span>
+          <span class="line-cat-btn ${l.category==='food'?'is-food':l.category==='room'?'is-room':'is-drinks'}">${catLabel}</span>
         </div>
       </div>
       <div style="display:flex;align-items:center;gap:0.4rem;flex-shrink:0;">
@@ -504,6 +542,7 @@ function renderToday(){
   const todayE=entries.filter(e=>e.date===today);
   const food=todayE.filter(e=>e.category==='food').reduce((s,e)=>s+e.amount,0);
   const drinks=todayE.filter(e=>e.category==='drinks').reduce((s,e)=>s+e.amount,0);
+  const room=todayE.filter(e=>e.category==='room').reduce((s,e)=>s+e.amount,0);
   const lunch=todayE.filter(e=>e.category==='food'&&e.meal==='lunch').reduce((s,e)=>s+e.amount,0);
   const dinner=todayE.filter(e=>e.category==='food'&&e.meal==='dinner').reduce((s,e)=>s+e.amount,0);
   const rem=DAILY_BUDGET-food;
@@ -517,10 +556,17 @@ function renderToday(){
   document.getElementById('today-lunch').textContent=fmtAmt(lunch);
   document.getElementById('today-dinner').textContent=fmtAmt(dinner);
   document.getElementById('today-drinks').textContent=fmtAmt(drinks);
+  document.getElementById('today-room').textContent=fmtAmt(room);
   const allDrinks=entries.filter(e=>e.category==='drinks').reduce((s,e)=>s+e.amount,0);
+  const allRoom=entries.filter(e=>e.category==='room').reduce((s,e)=>s+e.amount,0);
   const days=new Set(entries.map(e=>e.date)).size;
   document.getElementById('trip-total-drinks').textContent=fmtAmt(allDrinks);
+  document.getElementById('trip-total-room').textContent=fmtAmt(allRoom);
   document.getElementById('trip-days-label').textContent='Across '+days+' day'+(days===1?'':'s');
+  document.getElementById('trip-room-aud').textContent='~A$'+(allRoom*fjdToAud).toFixed(2);
+  const checkoutFJD = allDrinks + allRoom;
+  document.getElementById('checkout-total-fjd').textContent = fmtAmt(checkoutFJD);
+  document.getElementById('checkout-total-aud').textContent = '~A$'+(checkoutFJD*fjdToAud).toFixed(2);
   updateAUD(allDrinks);
 
   const list=document.getElementById('today-entries-list');
@@ -532,7 +578,7 @@ function renderToday(){
       <div style="flex:1;min-width:0;">
         <div style="display:flex;gap:0.4rem;align-items:center;margin-bottom:0.25rem;flex-wrap:wrap;">
           <span class="pill pill-${e.meal}">${e.meal}</span>
-          <span class="pill pill-${e.category}">${e.category==='food'?'Food':'Drinks'}</span>
+          <span class="pill pill-${e.category==='room'?'room':e.category}">${e.category==='food'?'Food':e.category==='room'?'Room Charge':'Drinks'}</span>
           <span class="pill ${e.synced?'pill-synced':'pill-unsynced'}">${e.synced?'Synced':'Not synced'}</span>
         </div>
         <div style="font-size:0.78rem;font-weight:600;color:var(--text);margin-bottom:0.15rem;">${esc(e.note||'No note')}</div>
@@ -556,6 +602,7 @@ function getDayData(){
       label:fmtDate(d),
       food:dayE.filter(e=>e.category==='food').reduce((s,e)=>s+e.amount,0),
       drinks:dayE.filter(e=>e.category==='drinks').reduce((s,e)=>s+e.amount,0),
+      room:dayE.filter(e=>e.category==='room').reduce((s,e)=>s+e.amount,0),
       lunch:dayE.filter(e=>e.category==='food'&&e.meal==='lunch').reduce((s,e)=>s+e.amount,0),
       dinner:dayE.filter(e=>e.category==='food'&&e.meal==='dinner').reduce((s,e)=>s+e.amount,0),
     };
@@ -569,10 +616,12 @@ function renderCharts(){
   const totalFood=data.reduce((s,d)=>s+d.food,0);
   const totalDrinks=data.reduce((s,d)=>s+d.drinks,0);
   const avgFood=data.length?totalFood/data.length:0;
+  const totalRoom=data.reduce((s,d)=>s+(d.room||0),0);
   document.getElementById('cs-days').textContent=data.length;
   document.getElementById('cs-food').textContent=fmtAmt(totalFood);
   document.getElementById('cs-drinks').textContent=fmtAmt(totalDrinks);
   document.getElementById('cs-avg').textContent=fmtAmt(avgFood);
+  document.getElementById('cs-room').textContent=fmtAmt(totalRoom);
 
   if(!data.length) return;
 
@@ -606,7 +655,7 @@ function renderCharts(){
   const pad={top:16,right:12,bottom:40,left:48};
   const chartW=W-pad.left-pad.right;
   const chartH=H-pad.top-pad.bottom;
-  const maxVal=Math.max(...data.map(d=>d.food+d.drinks),DAILY_BUDGET)*1.1;
+  const maxVal=Math.max(...data.map(d=>d.food+(d.drinks||0)+(d.room||0)),DAILY_BUDGET)*1.1;
   const barW=Math.min(36,chartW/data.length-8);
 
   ctx.clearRect(0,0,W,H);
@@ -630,8 +679,17 @@ function renderCharts(){
   data.forEach((d,i)=>{
     const x=pad.left+(chartW/data.length)*i+(chartW/data.length-barW)/2;
 
-    // drinks segment (top)
-    if(d.drinks>0){
+    // room segment (top)
+    if((d.room||0)>0){
+      const rH=(d.room/maxVal)*chartH;
+      const fH=(d.food/maxVal)*chartH;
+      const dH=((d.drinks||0)/maxVal)*chartH;
+      const ry=pad.top+chartH-fH-dH-rH;
+      ctx.fillStyle='#5b4fcf';
+      roundRect(ctx,x,ry,barW,rH,3);
+    }
+    // drinks segment
+    if((d.drinks||0)>0){
       const dH=(d.drinks/maxVal)*chartH;
       const fH=(d.food/maxVal)*chartH;
       const dy=pad.top+chartH-fH-dH;
@@ -746,7 +804,7 @@ function renderHistory(){
           <div style="flex:1;min-width:0;">
             <div style="display:flex;gap:0.4rem;align-items:center;flex-wrap:wrap;margin-bottom:0.15rem;">
               <span class="pill pill-${e.meal}">${e.meal}</span>
-              <span class="pill pill-${e.category}">${e.category==='food'?'Food':'Drinks'}</span>
+              <span class="pill pill-${e.category==='room'?'room':e.category}">${e.category==='food'?'Food':e.category==='room'?'Room Charge':'Drinks'}</span>
               <span class="pill ${e.synced?'pill-synced':'pill-unsynced'}">${e.synced?'Synced':'Not synced'}</span>
             </div>
             <div style="font-size:0.78rem;font-weight:600;color:var(--text);">${esc(e.note||'No note')}</div>
